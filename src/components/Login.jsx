@@ -4,7 +4,8 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import { Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import useAuth from "./hooks/index.js";
+import useAuth from "../hooks/index.js";
+import NavBar from "./Nav"
 
 const loginSchema = Yup.object().shape({
   username: Yup.string()
@@ -49,13 +50,7 @@ const LoginPage = () => {
     <div className="h-100">
       <div className="h-100" id="chat">
         <div className="d-flex flex-column h-100">
-          <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
-            <div className="container">
-              <a className="navbar-brand" href="/">
-                Hexlet Chat
-              </a>
-            </div>
-          </nav>
+          <NavBar />
           <div className="container-fluid h-100">
             <div className="row justify-content-center align-content-center h-100">
               <div className="col-12 col-md-8 col-xxl-6">

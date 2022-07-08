@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import "./App.css";
-//import AuthProvider from "./AuthProvider.jsx";
-import AuthContext from "./context";
+import "../App.css";
+import AuthContext from "../context";
 import Home from "./Home.jsx";
 import Login from "./Login.jsx";
 import Error from "./Error.jsx";
