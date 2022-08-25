@@ -1,7 +1,7 @@
-.App {
+/* .App {
   text-align: center;
-}
-.invalid-tooltip {
+} */
+/* .invalid-tooltip {
     position: absolute;
     top: 100%;
     z-index: 5;
@@ -15,4 +15,20 @@ rem
     color: #fff;
     background-color: rgba(220,53,69,0.9);
     border-radius: 0.25rem;
+} */
+/* #messages-box {
+  height: calc(100vh - 110px);
+  overflow-y: scroll;
+} */
+#messages-box {
+height: 100%;
+overflow-x: hidden;
+overflow-y: auto;
+/* transform: rotate(180deg); */
+direction: ltr;
+text-align:left;
+}
+ul {
+overflow: hidden;
+/* transform: rotate(180deg); */
 }

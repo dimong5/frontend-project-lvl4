@@ -34,12 +34,16 @@ const LoginPage = () => {
     validationSchema:  loginSchema ,
     onSubmit: async (values) => {
       try {
+        //localStorage.clear();
         const response = await axios.post(
           "http://localhost:3000/api/v1/login",
           values
         );
-        localStorage.setItem("userId", JSON.stringify(response.data));
-        auth.logIn();
+        //debugger
+        localStorage.setItem("user", JSON.stringify(response.data));
+        console.log((localStorage.getItem('user')));
+
+        auth.logIn('admin');
         navigate("../", { replace: true });
       } catch (err) {
         setErrorMessage(true);
