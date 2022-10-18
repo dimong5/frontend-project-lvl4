@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import { Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import useAuth from "../hooks/index.js";
+import { useAuth } from "../hooks/index.js";
 import NavBar from "./Nav"
 
 const loginSchema = Yup.object().shape({
@@ -40,10 +40,16 @@ const LoginPage = () => {
           values
         );
         //debugger
-        localStorage.setItem("user", JSON.stringify(response.data));
-        console.log((localStorage.getItem('user')));
-
-        auth.logIn('admin');
+        const token = JSON.stringify(response.data);
+        console.log("token", token);
+        localStorage.setItem('user', token);
+        const local = localStorage.getItem('user');
+        console.log('local', local);
+        auth.logIn({ username: values.username });
+        console.log('localStorage Login', localStorage.getItem('user'));
+        //debugger
+        //auth.logIn({ user: values.username, token: token });
+        //console.log('auth.user', auth.user);
         navigate("../", { replace: true });
       } catch (err) {
         setErrorMessage(true);

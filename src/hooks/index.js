@@ -1,6 +1,8 @@
 import { useContext } from "react";
 import AuthContext from "../context";
+import MessageIpaContext from "../context/massageApi.js";
 
-const useAuth = () => useContext(AuthContext);
+export const useMessageApi = () => useContext(MessageIpaContext);
+export const  useAuth = () => useContext(AuthContext);
 
-export default useAuth;
+//export default useAuth;
