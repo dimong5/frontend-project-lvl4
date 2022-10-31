@@ -1,37 +1,41 @@
 import { useState } from "react";
 import AuthContext from "../context";
+import axios from "axios";
 
 const AuthProvider = ({ children }) => {
   //localStorage.clear()
   const currentUser = JSON.parse(localStorage.getItem("user"));
-  const [loggedIn, setLoggedIn] = useState(false);
+  //const [loggedIn, setLoggedIn] = useState(false);
   const [user, setUser] = useState(
     currentUser ? { username: currentUser.username } : null
   );
 
   const getAuthHeader = () => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    console.log("user getAuthHeader", user);
-    if (user && user.token) {
-      return { Authorization: `Bearer ${user.token}` };
+    const { token } = JSON.parse(localStorage.getItem("user"));
+    //console.log("user getAuthHeader user", user, "!!!!!!!localStorage key user", localStorage.getItem('user'));
+    if (user && token) {
+      return { Authorization: `Bearer ${token}` };
     }
 
     return {};
   };
 
   const logIn = (user) => {
-    //localStorage.setItem("user", JSON.stringify(user));
+    localStorage.setItem("user", JSON.stringify(user));
     setUser({ username: user.username });
-    setLoggedIn(true);
   };
   const logOut = () => {
     localStorage.removeItem("user");
-    setLoggedIn(false);
+    setUser(null)
+  };
+
+  const signUp = async (user) => {
+  return axios.post("http://localhost:3000/api/v1/signup", user);
   };
 
   return (
     <AuthContext.Provider
-      value={{ loggedIn, logIn, logOut, user, getAuthHeader }}
+      value={{ logIn, logOut, signUp, user, getAuthHeader }}
     >
       {children}
     </AuthContext.Provider>

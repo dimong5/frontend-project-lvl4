@@ -12,6 +12,7 @@ import { useState } from "react";
 import cn from "classnames";
 import getModal from "./modals/index";
 import { Button, ButtonGroup, Dropdown } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 
 const renderModal = (modalInfo, hideModal) => {
   if (!modalInfo.type) return null;
@@ -29,8 +30,6 @@ const renderMessage = (mes) => {
 };
 
 const Chat = () => {
-  //const [currentChannel, setCurrentChannel] = useState(1);
-
   const currentChannel = useSelector(
     (state) => state.channels.value.currentChannel
   );
@@ -42,7 +41,7 @@ const Chat = () => {
     const getData = async () => {
       try {
         const data = await api.fetchData();
-        console.log("api.fetchData", data);
+        //console.log("api.fetchData", data);
         const { messages, channels } = data;
         dispatch(addMessages(messages));
         dispatch(addChannels(channels));
@@ -152,16 +151,12 @@ const ChannelsBox = ({ currentChannel, setCurrentChannel }) => {
     setModalInfo({ type: null, item: null });
   };
 
-  //const [modal, setModal] = useState(null);
   const channels = useSelector((state) => state.channels.value.channels);
-  const api = useMessageApi();
   const handleAddChannel = async (e) => {
     e.preventDefault();
     setModalInfo({ type: "addChannel", item: null });
-    //await api.addNewChannel({name: 'test'})
   };
 
-  //const channel = channels.find((ch) => ch.id === currentChannel);
   return (
     <div className="col-4 col-md-2 border-end pt-5 px-0 bg-light">
       <div className="d-flex justify-content-between mb-2 ps-4 pe-2">
@@ -195,6 +190,7 @@ const ChannelsBox = ({ currentChannel, setCurrentChannel }) => {
 };
 
 const ChatBox = ({ currentChannel }) => {
+  const {t} = useTranslation()
   const channels = useSelector((state) => state.channels.value.channels);
   const channel = channels.find((ch) => ch.id === currentChannel);
   const chatBoxRef = useRef();
@@ -235,7 +231,7 @@ const ChatBox = ({ currentChannel }) => {
             <b># {channel?.name || null}</b>
           </p>
           <span className="text-muted">
-            {currentChannelMessages.length} сообщений
+            {t("messages.key", { count: currentChannelMessages.length })}
           </span>
         </div>
         <div

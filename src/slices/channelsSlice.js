@@ -12,7 +12,9 @@ const channelsSlice = createSlice({
   initialState,
   reducers: {
     addOne: (state, action) => {
-      state.value.channels.push(action.payload);
+      const channel = action.payload;
+      state.value.channels.push(channel);
+      state.value.currentChannel = channel.id
     },
     addMany: (state, action) => {
       state.value.channels = [...state.value.channels, ...action.payload];
@@ -22,6 +24,7 @@ const channelsSlice = createSlice({
         (el) => el.id !== action.payload
       );
       state.value.channels = newState;
+      state.value.currentChannel = 1;
     },
     renameChannel: (state, action) => {
       const channelIndex = state.value.channels.findIndex(

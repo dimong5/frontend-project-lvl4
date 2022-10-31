@@ -6,6 +6,7 @@ import { Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/index.js";
 import NavBar from "./Nav"
+import logo from "../images/login.jpeg"
 
 const loginSchema = Yup.object().shape({
   username: Yup.string()
@@ -39,17 +40,8 @@ const LoginPage = () => {
           "http://localhost:3000/api/v1/login",
           values
         );
-        //debugger
-        const token = JSON.stringify(response.data);
-        console.log("token", token);
-        localStorage.setItem('user', token);
-        const local = localStorage.getItem('user');
-        console.log('local', local);
-        auth.logIn({ username: values.username });
-        console.log('localStorage Login', localStorage.getItem('user'));
-        //debugger
-        //auth.logIn({ user: values.username, token: token });
-        //console.log('auth.user', auth.user);
+        const token = response.data.token;
+        auth.logIn({ username: values.username, token });
         navigate("../", { replace: true });
       } catch (err) {
         setErrorMessage(true);
@@ -60,13 +52,16 @@ const LoginPage = () => {
     <div className="h-100">
       <div className="h-100" id="chat">
         <div className="d-flex flex-column h-100">
-          <NavBar />
+          <NavBar parentComponent="Login" />
           <div className="container-fluid h-100">
             <div className="row justify-content-center align-content-center h-100">
               <div className="col-12 col-md-8 col-xxl-6">
                 <div className="card shadow-sm">
                   <div className="card-body row p-5">
-                    <div className="col-12 col-md-6 d-flex align-items-center justify-content-center"></div>
+                    <div className="col-12 col-md-6 d-flex align-items-center justify-content-center">
+                      <img src={logo} className="rounded-circle" alt="Войти" />
+                    </div>
+
                     <Form
                       onSubmit={formik.handleSubmit}
                       className="col-12 col-md-6 mt-3 mt-mb-0"

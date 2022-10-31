@@ -29,6 +29,5 @@ direction: ltr;
 text-align:left;
 }
 ul {
-overflow: hidden;
 /* transform: rotate(180deg); */
 }

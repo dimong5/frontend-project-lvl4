@@ -8,6 +8,13 @@ export default {
       nameSize: "От 3 до 20 символов",
       required: "Обязательное поле",
       mustBeUniq: "Должно быть уникальным",
+      passwordComfirmationError: "Пароли должны совпадать",
+      passwordLengthError: "Не менее 6 символов",
+    },
+    messages: {
+      key_one: "{{count}} cooбщение",
+      key_few: "{{count}} сообщения",
+      key_many: "{{count}} сообщений",
     },
     // buttons: {
     //   counter: {

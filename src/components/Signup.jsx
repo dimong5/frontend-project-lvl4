@@ -1,0 +1,170 @@
+import React from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import {
+  Form,
+  FormGroup,
+  FormControl,
+  Button,
+} from "react-bootstrap";
+import logo from "../images/registration_logo.jpg";
+import { useAuth } from "../hooks";
+import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import NavBar from "./Nav";
+
+const Schema = Yup.object().shape({
+  username: Yup.string()
+    .min(3, "validationErrors.nameSize")
+    .max(20, "validationErrors.nameSize")
+    .required("validationErrors.required"),
+  password: Yup.string()
+    .min(6, "validationErrors.passwordLengthError")
+    .required("validationErrors.required"),
+  confirmPassword: Yup.string().when("password", {
+    is: (val) => (val && val.length > 0 ? true : false),
+    then: Yup.string().oneOf(
+      [Yup.ref("password")],
+      "validationErrors.passwordComfirmationError"
+    ),
+  }),
+});
+
+const Signup = () => {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const auth = useAuth();
+  const formik = useFormik({
+    initialValues: {
+      username: "",
+      password: "",
+      confirmPassword: "",
+    },
+    validationSchema: Schema,
+    onSubmit: async (values) => {
+      console.log(values);
+      const user = {
+        username: values.username,
+        password: values.password,
+      }
+      try {
+        const response = await auth.signUp(user)
+        console.log('signup response', response)
+        auth.logOut();
+        //localStorage.setItem('user', JSON.stringify(response.data));
+        //auth.user = 
+        console.log('localstorage from signup', localStorage.getItem('user'))
+        
+        auth.logIn({ username: values.username, token: response.data.token });
+        navigate("/", { replace: true });
+
+        //console.log(response)
+        //await auth.logIn(user)
+      } catch (e) {
+        const { status } = e.response;
+        console.log(status)
+        if (status === 409) {
+          formik.setErrors({ username: 'Такой пользователь уже существует' });
+        }
+      }
+      
+
+      
+    },
+  });
+
+  return (
+    <div className="h-100" id="chat">
+      <div className="d-flex flex-column h-100">
+        <NavBar parentComponent="Signup"/>
+        <div className="container-fluid h-100">
+          <div className="row justify-content-center align-content-center h-100">
+            <div className="col-12 col-md-8 col-xxl-6">
+              <div className="card shadow-sm">
+                <div className="card-body d-flex flex-column flex-md-row justify-content-around align-items-center p-5">
+                  <div>
+                    <img
+                      src={logo}
+                      className="rounded-circle"
+                      alt="Регистрация"
+                    />
+                  </div>
+
+                  <Form onSubmit={formik.handleSubmit} className="w-50">
+                    <h1 className="text-center mb-4">Регистрация</h1>
+                    <FormGroup className="form-floating mb-3">
+                      <FormControl
+                        id="username"
+                        name="username"
+                        className="mb-3"
+                        onChange={formik.handleChange}
+                        value={formik.values.username}
+                        onBlur={formik.handleBlur}
+                        isInvalid={
+                          formik.errors.username && formik.touched.username
+                        }
+                      ></FormControl>
+                      <Form.Label htmlFor="username">
+                        Имя пользователя
+                      </Form.Label>
+                      <FormControl.Feedback type="invalid" tooltip>
+                        {t(formik.errors.username)}
+                      </FormControl.Feedback>
+                    </FormGroup>
+                    <FormGroup className="form-floating mb-4">
+                      <FormControl
+                        id="password"
+                        name="password"
+                        className="mb-3"
+                        onChange={formik.handleChange}
+                        value={formik.values.password}
+                        onBlur={formik.handleBlur}
+                        isInvalid={
+                          formik.errors.password && formik.touched.password
+                        }
+                      ></FormControl>
+                      <Form.Label htmlFor="password">Пароль</Form.Label>
+                      <FormControl.Feedback type="invalid" tooltip>
+                        {t(formik.errors.password)}
+                      </FormControl.Feedback>
+                    </FormGroup>
+                    <FormGroup className="form-floating mb-4">
+                      <FormControl
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        className="mb-3"
+                        onChange={formik.handleChange}
+                        value={formik.values.confirmPassword}
+                        onBlur={formik.handleBlur}
+                        isInvalid={
+                          formik.errors.confirmPassword &&
+                          formik.touched.confirmPassword
+                        }
+                      ></FormControl>
+                      <Form.Label htmlFor="confirmPassword">
+                        Подтвердите пароль
+                      </Form.Label>
+                      <FormControl.Feedback type="invalid" tooltip>
+                        {t(formik.errors.confirmPassword)}
+                      </FormControl.Feedback>
+                    </FormGroup>
+                    <Button
+                      className="w-100"
+                      variant="outline-primary"
+                      type="submit"
+                    >
+                      Зарегистрироваться
+                    </Button>
+                  </Form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="Toastify"></div>
+    </div>
+  );
+};
+
+export default Signup;

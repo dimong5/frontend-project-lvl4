@@ -1,28 +1,16 @@
-import { Modal, Form, FormGroup, FormControl, Button } from "react-bootstrap";
-import { useFormik } from "formik";
+import { Modal, Form, Button } from "react-bootstrap";
 import { useMessageApi } from "../../hooks";
-import { useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { useSelector } from "react-redux";
 
 const RemoveChannel = ({ hideModal, modalInfo }) => {
   const { t } = useTranslation();
   const id  = modalInfo.item;
-  
   const api = useMessageApi();
-  const channels = useSelector((state) => state.channels.value.channels);
 
-  const formik = useFormik({
-    initialValues: {
-    },
-    validateOnBlur: false,
-    validateOnChange: false,
-    onSubmit: (values) => {
-      console.log('id', id)
-      api.removeChannel(id);
-      hideModal();
-    },
-  });
+  const handleSubmit = () => {
+    api.removeChannel(id);
+    hideModal();
+  }
 
   return (
     <Modal
@@ -37,13 +25,8 @@ const RemoveChannel = ({ hideModal, modalInfo }) => {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form onSubmit={formik.handleSubmit}>
-          <FormGroup>
-            
-            <FormControl.Feedback type="invalid">
-              {t(formik.errors.channelName)}
-            </FormControl.Feedback>
-          </FormGroup>
+        <p className="lead">Уверены?</p>
+        <Form onSubmit={handleSubmit}>
           <div className="d-flex justify-content-end">
             <Button
               type="button"
@@ -53,7 +36,7 @@ const RemoveChannel = ({ hideModal, modalInfo }) => {
             >
               Отменить
             </Button>
-            <Button type="submit" variant="primary">
+            <Button type="submit" variant="danger">
               Удалить
             </Button>
           </div>
