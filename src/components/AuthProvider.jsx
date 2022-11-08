@@ -3,16 +3,13 @@ import AuthContext from "../context";
 import axios from "axios";
 
 const AuthProvider = ({ children }) => {
-  //localStorage.clear()
   const currentUser = JSON.parse(localStorage.getItem("user"));
-  //const [loggedIn, setLoggedIn] = useState(false);
   const [user, setUser] = useState(
     currentUser ? { username: currentUser.username } : null
   );
 
   const getAuthHeader = () => {
     const { token } = JSON.parse(localStorage.getItem("user"));
-    //console.log("user getAuthHeader user", user, "!!!!!!!localStorage key user", localStorage.getItem('user'));
     if (user && token) {
       return { Authorization: `Bearer ${token}` };
     }

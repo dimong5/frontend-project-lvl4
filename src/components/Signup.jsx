@@ -15,17 +15,17 @@ import NavBar from "./Nav";
 
 const Schema = Yup.object().shape({
   username: Yup.string()
-    .min(3, "validationErrors.nameSize")
-    .max(20, "validationErrors.nameSize")
-    .required("validationErrors.required"),
+    .min(3, "registrationPage.nameSize")
+    .max(20, "registrationPage.nameSize")
+    .required("registrationPage.required"),
   password: Yup.string()
-    .min(6, "validationErrors.passwordLengthError")
-    .required("validationErrors.required"),
+    .min(6, "registrationPage.passwordLengthError")
+    .required("registrationPage.required"),
   confirmPassword: Yup.string().when("password", {
     is: (val) => (val && val.length > 0 ? true : false),
     then: Yup.string().oneOf(
       [Yup.ref("password")],
-      "validationErrors.passwordComfirmationError"
+      "registrationPage.passwordComfirmationError"
     ),
   }),
 });
@@ -51,15 +51,10 @@ const Signup = () => {
         const response = await auth.signUp(user)
         console.log('signup response', response)
         auth.logOut();
-        //localStorage.setItem('user', JSON.stringify(response.data));
-        //auth.user = 
         console.log('localstorage from signup', localStorage.getItem('user'))
         
         auth.logIn({ username: values.username, token: response.data.token });
         navigate("/", { replace: true });
-
-        //console.log(response)
-        //await auth.logIn(user)
       } catch (e) {
         const { status } = e.response;
         console.log(status)
@@ -76,7 +71,7 @@ const Signup = () => {
   return (
     <div className="h-100" id="chat">
       <div className="d-flex flex-column h-100">
-        <NavBar parentComponent="Signup"/>
+        <NavBar parentComponent="Signup" />
         <div className="container-fluid h-100">
           <div className="row justify-content-center align-content-center h-100">
             <div className="col-12 col-md-8 col-xxl-6">
@@ -91,7 +86,9 @@ const Signup = () => {
                   </div>
 
                   <Form onSubmit={formik.handleSubmit} className="w-50">
-                    <h1 className="text-center mb-4">Регистрация</h1>
+                    <h1 className="text-center mb-4">
+                      {t("registrationPage.regFormHeader")}
+                    </h1>
                     <FormGroup className="form-floating mb-3">
                       <FormControl
                         id="username"
@@ -105,7 +102,7 @@ const Signup = () => {
                         }
                       ></FormControl>
                       <Form.Label htmlFor="username">
-                        Имя пользователя
+                        {t("registrationPage.loginPlaceholder")}
                       </Form.Label>
                       <FormControl.Feedback type="invalid" tooltip>
                         {t(formik.errors.username)}
@@ -123,7 +120,9 @@ const Signup = () => {
                           formik.errors.password && formik.touched.password
                         }
                       ></FormControl>
-                      <Form.Label htmlFor="password">Пароль</Form.Label>
+                      <Form.Label htmlFor="password">
+                        {t("registrationPage.passwordPlaceholder")}
+                      </Form.Label>
                       <FormControl.Feedback type="invalid" tooltip>
                         {t(formik.errors.password)}
                       </FormControl.Feedback>
@@ -142,7 +141,7 @@ const Signup = () => {
                         }
                       ></FormControl>
                       <Form.Label htmlFor="confirmPassword">
-                        Подтвердите пароль
+                        {t("registrationPage.passwordConfirmationPlaceholder")}
                       </Form.Label>
                       <FormControl.Feedback type="invalid" tooltip>
                         {t(formik.errors.confirmPassword)}
@@ -153,7 +152,7 @@ const Signup = () => {
                       variant="outline-primary"
                       type="submit"
                     >
-                      Зарегистрироваться
+                      {t("registrationPage.submitButton")}
                     </Button>
                   </Form>
                 </div>

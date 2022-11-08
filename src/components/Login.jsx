@@ -5,8 +5,9 @@ import { useFormik } from "formik";
 import { Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/index.js";
-import NavBar from "./Nav"
-import logo from "../images/login.jpeg"
+import NavBar from "./Nav";
+import logo from "../images/login.jpeg";
+import { useTranslation } from "react-i18next";
 
 const loginSchema = Yup.object().shape({
   username: Yup.string()
@@ -20,6 +21,7 @@ const loginSchema = Yup.object().shape({
 });
 
 const LoginPage = () => {
+  const { t } = useTranslation();
   const input = useRef();
   const auth = useAuth();
 
@@ -27,12 +29,14 @@ const LoginPage = () => {
     input.current.focus();
   }, []);
 
-  const [errorMessage, setErrorMessage] = useState(false);
+  //const [errorMessage, setErrorMessage] = useState(false);
   const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: { username: "", password: "" },
-    validationSchema:  loginSchema ,
+    validationSchema: loginSchema,
+    validateOnChange: false,
+    validateOnBlur: false,
     onSubmit: async (values) => {
       try {
         //localStorage.clear();
@@ -44,7 +48,7 @@ const LoginPage = () => {
         auth.logIn({ username: values.username, token });
         navigate("../", { replace: true });
       } catch (err) {
-        setErrorMessage(true);
+        formik.setErrors({ username: "loginPage.loginOrPasswordError" });
       }
     },
   });
@@ -66,7 +70,7 @@ const LoginPage = () => {
                       onSubmit={formik.handleSubmit}
                       className="col-12 col-md-6 mt-3 mt-mb-0"
                     >
-                      <h1 className="text-center mb-4">Войти</h1>
+                      <h1 className="text-center mb-4">{t("loginPage.loginHeader")}</h1>
                       <Form.Group className="form-floating mb-3">
                         <Form.Control
                           onChange={formik.handleChange}
@@ -80,12 +84,14 @@ const LoginPage = () => {
                           ref={input}
                         />
                         <Form.Label className="form-label" htmlFor="username">
-                          Username
+                          {t("loginPage.usernamePlaceholder")}
                         </Form.Label>
                       </Form.Group>
                       <Form.Group className="form-floating mb-3">
                         <Form.Control
-                          isInvalid={errorMessage}
+                          isInvalid={
+                            formik.errors.username && formik.touched.username
+                          }
                           onChange={formik.handleChange}
                           value={formik.values.password}
                           placeholder="password"
@@ -97,24 +103,24 @@ const LoginPage = () => {
                           type="password"
                         />
                         <Form.Label className="form-label" htmlFor="password">
-                          Password
+                          {t("loginPage.passwordPlaceholder")}
                         </Form.Label>
                         <Form.Control.Feedback className="invalid-tooltip">
-                          Неверные имя пользователя или пароль
+                          {t(formik.errors.username)}
                         </Form.Control.Feedback>
                       </Form.Group>
                       <button
                         type="submit"
                         className="w-100 mb-3 btn btn-outline-primary"
                       >
-                        Submit
+                        {t("loginPage.submitButton")}
                       </button>
                     </Form>
                   </div>
                   <div className="card-footer p-4">
                     <div className="text-center">
-                      <span>Нет аккаунта?</span>
-                      <a href="/signup">Регистрация</a>
+                      <span>{t("loginPage.noAccount")}</span>
+                      <a href="/signup">{t("loginPage.registration")}</a>
                     </div>
                   </div>
                 </div>

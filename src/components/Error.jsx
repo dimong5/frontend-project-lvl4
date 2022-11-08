@@ -1,7 +1,9 @@
 import React from "react";
 import logo from "../images/page_not_found.svg"
+import { useTranslation } from "react-i18next";
 
 function Home() {
+  const { t } = useTranslation();
   return (
     <div className="h-100">
       <div className="h-100" id="chat">
@@ -19,9 +21,10 @@ function Home() {
               className="img-fluid h-25"
               src={logo}
             />
-            <h1 className="h4 text-muted">Страница не найдена</h1>
+            <h1 className="h4 text-muted">{t("errorPage.pageNotFound")}</h1>
             <p className="text-muted">
-              Но вы можете перейти <a href="/">на главную страницу</a>
+              {t("errorPage.homepageInvitation")}{" "}
+              <a href="/">{t("errorPage.homepageLinkCaption")}</a>
             </p>
           </div>
         </div>

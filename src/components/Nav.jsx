@@ -1,8 +1,10 @@
 import React from 'react';
 import { useAuth } from '../hooks';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const NavBar = ({ parentComponent }) => {
+  const { t } = useTranslation();
   const auth = useAuth();
   const navigate = useNavigate();
   const handleClick = (e) => {
@@ -25,7 +27,7 @@ const NavBar = ({ parentComponent }) => {
             onClick={handleClick}
             className="btn btn-primary"
           >
-            Выйти
+            {t('nav.logout')}
           </button>
         ) : null}
       </div>

@@ -2,17 +2,15 @@ import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  addMany as addChannels,
-  setCurrentChannel,
+  setCurrentChannel, setInitialState,
 } from "../slices/channelsSlice";
-import { addMany as addMessages } from "../slices/messagesSlice";
 import { useMessageApi } from "../hooks";
 import ComponentWrapper from "./ComponentWrapper";
 import { useState } from "react";
-import cn from "classnames";
 import getModal from "./modals/index";
 import { Button, ButtonGroup, Dropdown } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
+import { useFormik } from "formik";
 
 const renderModal = (modalInfo, hideModal) => {
   if (!modalInfo.type) return null;
@@ -31,7 +29,7 @@ const renderMessage = (mes) => {
 
 const Chat = () => {
   const currentChannel = useSelector(
-    (state) => state.channels.value.currentChannel
+    (state) => state.channels.currentChannel
   );
   const dispatch = useDispatch();
   const api = useMessageApi();
@@ -41,10 +39,7 @@ const Chat = () => {
     const getData = async () => {
       try {
         const data = await api.fetchData();
-        //console.log("api.fetchData", data);
-        const { messages, channels } = data;
-        dispatch(addMessages(messages));
-        dispatch(addChannels(channels));
+        dispatch(setInitialState(data));
       } catch {
         navigate("/login");
       }
@@ -52,7 +47,7 @@ const Chat = () => {
     getData();
   }, [dispatch, navigate, api]);
 
-  const channels = useSelector((state) => state.channels.value.channels);
+  const channels = useSelector((state) => state.channels.channels);
 
   return (
     <ComponentWrapper>
@@ -74,6 +69,7 @@ const Chat = () => {
 };
 
 const ChannelsBox = ({ currentChannel, setCurrentChannel }) => {
+  const { t } = useTranslation();
   const [modalInfo, setModalInfo] = useState({ type: null, item: null });
   const dispatch = useDispatch();
 
@@ -81,14 +77,11 @@ const ChannelsBox = ({ currentChannel, setCurrentChannel }) => {
     const handleRenameChannel = async (e) => {
       e.preventDefault();
       setModalInfo({ type: "renameChannel", item: channel });
-      //await api.addNewChannel({name: 'test'})
     };
 
     const handleRemoveChannel = async (e) => {
       e.preventDefault();
-      console.log("handleRemove channelid", channel.id);
       setModalInfo({ type: "removeChannel", item: channel.id });
-      //await api.addNewChannel({name: 'test'})
     };
 
     const key = channel.id;
@@ -124,10 +117,10 @@ const ChannelsBox = ({ currentChannel, setCurrentChannel }) => {
 
             <Dropdown.Menu>
               <Dropdown.Item onClick={handleRemoveChannel}>
-                Удалить
+                {t("channelBox.removeChannel")}
               </Dropdown.Item>
               <Dropdown.Item onClick={handleRenameChannel}>
-                Переименовать
+                {t("channelBox.renameChannel")}
               </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
@@ -151,7 +144,7 @@ const ChannelsBox = ({ currentChannel, setCurrentChannel }) => {
     setModalInfo({ type: null, item: null });
   };
 
-  const channels = useSelector((state) => state.channels.value.channels);
+  const channels = useSelector((state) => state.channels.channels);
   const handleAddChannel = async (e) => {
     e.preventDefault();
     setModalInfo({ type: "addChannel", item: null });
@@ -160,7 +153,7 @@ const ChannelsBox = ({ currentChannel, setCurrentChannel }) => {
   return (
     <div className="col-4 col-md-2 border-end pt-5 px-0 bg-light">
       <div className="d-flex justify-content-between mb-2 ps-4 pe-2">
-        <span>Каналы</span>
+        <span>{t("channelBox.channelsHeader")}</span>
         <button
           onClick={handleAddChannel}
           type="button"
@@ -191,7 +184,7 @@ const ChannelsBox = ({ currentChannel, setCurrentChannel }) => {
 
 const ChatBox = ({ currentChannel }) => {
   const {t} = useTranslation()
-  const channels = useSelector((state) => state.channels.value.channels);
+  const channels = useSelector((state) => state.channels.channels);
   const channel = channels.find((ch) => ch.id === currentChannel);
   const chatBoxRef = useRef();
   const inputMessageRef = useRef();
@@ -199,7 +192,6 @@ const ChatBox = ({ currentChannel }) => {
   const currentChannelMessages = messages.filter(
     (message) => message.channelId === currentChannel
   );
-  const [messageText, setMessageText] = useState("");
   const user = JSON.parse(localStorage.getItem("user"));
   const api = useMessageApi();
 
@@ -207,21 +199,16 @@ const ChatBox = ({ currentChannel }) => {
     chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
     inputMessageRef.current.focus();
   });
-  const handleMessageText = (e) => {
-    setMessageText(e.target.value);
-  };
 
-  const isEmptyMessage = messageText === "";
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (isEmptyMessage) return;
-    api.sendMessage(messageText, user.username, currentChannel);
-    setMessageText("");
-  };
-
-  const submitButtonClasses = cn("btn", "btn-group-vertical", {
-    disabled: isEmptyMessage,
-  });
+  const formik = useFormik({
+    initialValues: {
+      messageText: '',
+    },
+    onSubmit: async (values, { resetForm }) => {
+      api.sendMessage(values.messageText, user.username, currentChannel);
+      resetForm();
+    },
+  })
 
   return (
     <div className="col p-0 h-100">
@@ -231,7 +218,9 @@ const ChatBox = ({ currentChannel }) => {
             <b># {channel?.name || null}</b>
           </p>
           <span className="text-muted">
-            {t("messages.key", { count: currentChannelMessages.length })}
+            {t("chatBox.messages.key", {
+              count: currentChannelMessages.length,
+            })}
           </span>
         </div>
         <div
@@ -247,19 +236,19 @@ const ChatBox = ({ currentChannel }) => {
           <form
             noValidate=""
             className="py-1 border rounded-2"
-            onSubmit={handleSubmit}
+            onSubmit={formik.handleSubmit}
           >
             <div className="input-group has-validation">
               <input
                 ref={inputMessageRef}
-                name="body"
+                name="messageText"
                 aria-label="Новое сообщение"
-                placeholder="Введите сообщение..."
+                placeholder={t("chatBox.messageFieldPlaceholder")}
                 className="border-0 p-0 ps-2 form-control"
-                value={messageText}
-                onChange={handleMessageText}
+                value={formik.values.messageText}
+                onChange={formik.handleChange}
               />
-              <button type="submit" className={submitButtonClasses}>
+              <button type="submit" className="btn btn-group-vertical" disabled={formik.values.messageText === '' || formik.isSubmitting}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 16 16"

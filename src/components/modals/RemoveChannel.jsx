@@ -21,11 +21,11 @@ const RemoveChannel = ({ hideModal, modalInfo }) => {
     >
       <Modal.Header closeButton>
         <Modal.Title id="example-custom-modal-styling-title">
-          Удалить канал
+          {t("removeChannelModal.addChannelFormHeader")}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p className="lead">Уверены?</p>
+        <p className="lead">{t("removeChannelModal.areYouSure")}</p>
         <Form onSubmit={handleSubmit}>
           <div className="d-flex justify-content-end">
             <Button
@@ -34,10 +34,10 @@ const RemoveChannel = ({ hideModal, modalInfo }) => {
               onClick={hideModal}
               variant="secondary"
             >
-              Отменить
+              {t("removeChannelModal.cancelButton")}
             </Button>
             <Button type="submit" variant="danger">
-              Удалить
+              {t("removeChannelModal.submitButton")}
             </Button>
           </div>
         </Form>

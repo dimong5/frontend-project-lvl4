@@ -11,13 +11,13 @@ const AddChannel = ({ hideModal }) => {
   const { t } = useTranslation();
   const channelNameSchema = Yup.object().shape({
     channelName: Yup.string()
-      .min(3, "validationErrors.nameSize")
-      .max(20, "validationErrors.nameSize")
-      .required("validationErrors.required"),
+      .min(3, "addChannelModal.nameSize")
+      .max(20, "addChannelModal.nameSize")
+      .required("addChannelModal.required"),
   });
   const api = useMessageApi();
   const input = useRef(null);
-  const channels = useSelector((state) => state.channels.value.channels);
+  const channels = useSelector((state) => state.channels.channels);
   const isUniq = (name) => {
     return channels.findIndex((ch) => ch.name === name) === -1;
   };
@@ -34,7 +34,7 @@ const AddChannel = ({ hideModal }) => {
      validateOnChange: false,
      onSubmit: values => {
        if (!isUniq(values.channelName)) {
-         formik.setErrors({ channelName: t("validationErrors.mustBeUniq") });
+         formik.setErrors({ channelName: t("addChannelModal.mustBeUniq") });
          return;
        }
 
@@ -53,7 +53,7 @@ const AddChannel = ({ hideModal }) => {
     >
       <Modal.Header closeButton>
         <Modal.Title id="example-custom-modal-styling-title">
-          Добавить канал
+          {t("addChannelModal.addChannelFormHeader")}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -85,10 +85,10 @@ const AddChannel = ({ hideModal }) => {
               onClick={hideModal}
               variant="secondary"
             >
-              Отменить
+              {t("addChannelModal.cancelButton")}
             </Button>
             <Button type="submit" variant="primary">
-              Отправить
+              {t("addChannelModal.submitButton")}
             </Button>
           </div>
         </Form>

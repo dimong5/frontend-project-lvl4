@@ -10,14 +10,14 @@ const RenameChannel = ({ hideModal, modalInfo }) => {
   const { t } = useTranslation();
   const channelNameSchema = Yup.object().shape({
     channelName: Yup.string()
-      .min(3, "validationErrors.nameSize")
-      .max(20, "validationErrors.nameSize")
-      .required("validationErrors.required"),
+      .min(3, "renameChannelModal.nameSize")
+      .max(20, "renameChannelModal.nameSize")
+      .required("renameChannelModal.required"),
   });
   const api = useMessageApi();
   const currentName = modalInfo.item.name;
   const input = useRef(null);
-  const channels = useSelector((state) => state.channels.value.channels);
+  const channels = useSelector((state) => state.channels.channels);
   const isUniq = (name) => {
     return channels.findIndex((ch) => ch.name === name) === -1;
   };
@@ -35,7 +35,7 @@ const RenameChannel = ({ hideModal, modalInfo }) => {
     validateOnChange: false,
     onSubmit: (values) => {
       if (!isUniq(values.channelName)) {
-        formik.setErrors({ channelName: t("validationErrors.mustBeUniq") });
+        formik.setErrors({ channelName: t("renameChannelModal.mustBeUniq") });
         return;
       }
       api.renameChannel(values.channelName, modalInfo.item.id);
@@ -53,7 +53,7 @@ const RenameChannel = ({ hideModal, modalInfo }) => {
     >
       <Modal.Header closeButton>
         <Modal.Title id="example-custom-modal-styling-title">
-          Переименовать канал
+          {t("renameChannelModal.renameChannelFormHeader")}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -85,10 +85,10 @@ const RenameChannel = ({ hideModal, modalInfo }) => {
               onClick={hideModal}
               variant="secondary"
             >
-              Отменить
+              {t("renameChannelModal.cancelButton")}
             </Button>
             <Button type="submit" variant="primary">
-              Отправить
+              {t("renameChannelModal.submitButton")}
             </Button>
           </div>
         </Form>
