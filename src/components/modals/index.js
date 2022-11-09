@@ -7,4 +7,7 @@ const modals = {
   renameChannel: RenameChannel,
   removeChannel: RemoveChannel,
 };
-export default (modal) => modals[modal];
+
+const modal = (modal) => modals[modal];
+
+export default modal;

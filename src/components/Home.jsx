@@ -11,6 +11,9 @@ import getModal from "./modals/index";
 import { Button, ButtonGroup, Dropdown } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useFormik } from "formik";
+import { ToastContainer, toast } from "react-toastify";
+
+import "react-toastify/dist/ReactToastify.css";
 
 const renderModal = (modalInfo, hideModal) => {
   if (!modalInfo.type) return null;
@@ -40,7 +43,7 @@ const Chat = () => {
       try {
         const data = await api.fetchData();
         dispatch(setInitialState(data));
-      } catch {
+      } catch (e) {
         navigate("/login");
       }
     };
@@ -64,6 +67,7 @@ const Chat = () => {
           ) : null}
         </div>
       </div>
+      <ToastContainer />
     </ComponentWrapper>
   );
 };
@@ -140,8 +144,11 @@ const ChannelsBox = ({ currentChannel, setCurrentChannel }) => {
     );
   };
 
-  const hideModal = () => {
+  const hideModal = (msg = null) => {
     setModalInfo({ type: null, item: null });
+    if (msg) {
+      toast(msg);
+    } 
   };
 
   const channels = useSelector((state) => state.channels.channels);

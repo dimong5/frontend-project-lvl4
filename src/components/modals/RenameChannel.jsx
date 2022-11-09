@@ -40,7 +40,7 @@ const RenameChannel = ({ hideModal, modalInfo }) => {
       }
       api.renameChannel(values.channelName, modalInfo.item.id);
       values.channelName = "";
-      hideModal();
+      hideModal(t("alertMessage.channelRenamed"));
     },
   });
 

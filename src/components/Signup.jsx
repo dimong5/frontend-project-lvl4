@@ -1,17 +1,14 @@
 import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import {
-  Form,
-  FormGroup,
-  FormControl,
-  Button,
-} from "react-bootstrap";
+import { Form, FormGroup, FormControl, Button } from "react-bootstrap";
 import logo from "../images/registration_logo.jpg";
 import { useAuth } from "../hooks";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import NavBar from "./Nav";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Schema = Yup.object().shape({
   username: Yup.string()
@@ -46,25 +43,26 @@ const Signup = () => {
       const user = {
         username: values.username,
         password: values.password,
-      }
+      };
       try {
-        const response = await auth.signUp(user)
-        console.log('signup response', response)
+        const response = await auth.signUp(user);
+        console.log("signup response", response);
         auth.logOut();
-        console.log('localstorage from signup', localStorage.getItem('user'))
-        
+        console.log("localstorage from signup", localStorage.getItem("user"));
+
         auth.logIn({ username: values.username, token: response.data.token });
         navigate("/", { replace: true });
       } catch (e) {
         const { status } = e.response;
-        console.log(status)
+        console.log(status);
         if (status === 409) {
-          formik.setErrors({ username: 'Такой пользователь уже существует' });
+          formik.setErrors({
+            username: "registrationPage.userAlreadyExist",
+          });
+        } else {
+          toast.error(t("alertMessage.connectionError"));
         }
       }
-      
-
-      
     },
   });
 
@@ -161,7 +159,7 @@ const Signup = () => {
           </div>
         </div>
       </div>
-      <div className="Toastify"></div>
+      <ToastContainer />
     </div>
   );
 };

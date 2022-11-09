@@ -40,7 +40,7 @@ const AddChannel = ({ hideModal }) => {
 
        api.addNewChannel(values.channelName);
        values.channelName = "";
-       hideModal();
+       hideModal(t("alertMessage.channelAdded"));
      },
    });
   

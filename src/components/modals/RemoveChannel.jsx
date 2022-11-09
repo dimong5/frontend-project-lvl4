@@ -9,7 +9,7 @@ const RemoveChannel = ({ hideModal, modalInfo }) => {
 
   const handleSubmit = () => {
     api.removeChannel(id);
-    hideModal();
+    hideModal(t("alertMessage.channelRemoved"));
   }
 
   return (

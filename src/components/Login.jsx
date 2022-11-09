@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { Form } from "react-bootstrap";
@@ -29,7 +29,6 @@ const LoginPage = () => {
     input.current.focus();
   }, []);
 
-  //const [errorMessage, setErrorMessage] = useState(false);
   const navigate = useNavigate();
 
   const formik = useFormik({
@@ -39,7 +38,6 @@ const LoginPage = () => {
     validateOnBlur: false,
     onSubmit: async (values) => {
       try {
-        //localStorage.clear();
         const response = await axios.post(
           "http://localhost:3000/api/v1/login",
           values
@@ -70,7 +68,9 @@ const LoginPage = () => {
                       onSubmit={formik.handleSubmit}
                       className="col-12 col-md-6 mt-3 mt-mb-0"
                     >
-                      <h1 className="text-center mb-4">{t("loginPage.loginHeader")}</h1>
+                      <h1 className="text-center mb-4">
+                        {t("loginPage.loginHeader")}
+                      </h1>
                       <Form.Group className="form-floating mb-3">
                         <Form.Control
                           onChange={formik.handleChange}

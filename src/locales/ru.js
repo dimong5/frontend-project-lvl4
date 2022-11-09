@@ -35,6 +35,7 @@ const ru = {
       passwordConfirmationPlaceholder: "Подтвердите пароль",
       submitButton: "Зарегистрироваться",
       regFormHeader: "Регистрация",
+      userAlreadyExist: "Такой пользователь уже существует",
     },
     loginPage: {
       usernamePlaceholder: "Ваш ник",
@@ -68,7 +69,12 @@ const ru = {
       submitButton: "Удалить",
     },
 
-    interface: {},
+    alertMessage: {
+      channelAdded: "Канал создан",
+      channelRenamed: "Канал переименован",
+      channelRemoved: "Канал удален",
+      connectionError: "Ошибка соединения",
+    },
   },
 };
 
