@@ -1,9 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  setCurrentChannel, setInitialState,
-} from "../slices/channelsSlice";
+import { setCurrentChannel, setInitialState } from "../slices/channelsSlice";
 import { useMessageApi } from "../hooks";
 import ComponentWrapper from "./ComponentWrapper";
 import { useState } from "react";
@@ -21,19 +19,8 @@ const renderModal = (modalInfo, hideModal) => {
   return <Component hideModal={hideModal} modalInfo={modalInfo} />;
 };
 
-const renderMessage = (mes) => {
-  const { message, user, id } = mes;
-  return (
-    <div className="text-break mb-2 float-left" key={id}>
-      <b>{user}</b>: {message}
-    </div>
-  );
-};
-
 const Chat = () => {
-  const currentChannel = useSelector(
-    (state) => state.channels.currentChannel
-  );
+  const currentChannel = useSelector((state) => state.channels.currentChannel);
   const dispatch = useDispatch();
   const api = useMessageApi();
   const navigate = useNavigate();
@@ -148,7 +135,7 @@ const ChannelsBox = ({ currentChannel, setCurrentChannel }) => {
     setModalInfo({ type: null, item: null });
     if (msg) {
       toast(msg);
-    } 
+    }
   };
 
   const channels = useSelector((state) => state.channels.channels);
@@ -190,7 +177,18 @@ const ChannelsBox = ({ currentChannel, setCurrentChannel }) => {
 };
 
 const ChatBox = ({ currentChannel }) => {
-  const {t} = useTranslation()
+  const filter = useMessageApi().filter;
+
+  const renderMessage = (mes) => {
+    const { message, user, id } = mes;
+    return (
+      <div className="text-break mb-2 float-left" key={id}>
+        <b>{user}</b>: {filter.clean(message)}
+      </div>
+    );
+  };
+
+  const { t } = useTranslation();
   const channels = useSelector((state) => state.channels.channels);
   const channel = channels.find((ch) => ch.id === currentChannel);
   const chatBoxRef = useRef();
@@ -209,13 +207,13 @@ const ChatBox = ({ currentChannel }) => {
 
   const formik = useFormik({
     initialValues: {
-      messageText: '',
+      messageText: "",
     },
     onSubmit: async (values, { resetForm }) => {
       api.sendMessage(values.messageText, user.username, currentChannel);
       resetForm();
     },
-  })
+  });
 
   return (
     <div className="col p-0 h-100">
@@ -255,7 +253,13 @@ const ChatBox = ({ currentChannel }) => {
                 value={formik.values.messageText}
                 onChange={formik.handleChange}
               />
-              <button type="submit" className="btn btn-group-vertical" disabled={formik.values.messageText === '' || formik.isSubmitting}>
+              <button
+                type="submit"
+                className="btn btn-group-vertical"
+                disabled={
+                  formik.values.messageText === "" || formik.isSubmitting
+                }
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 16 16"

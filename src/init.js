@@ -10,9 +10,12 @@ import AuthProvider from "./components/AuthProvider";
 import { useAuth } from "./hooks";
 import { I18nextProvider } from "react-i18next";
 import initI18Next from "./i18/i18n.js";
+import filter from "leo-profanity";
 
+filter.add(filter.getDictionary("en"));
+filter.add(filter.getDictionary("fr"));
+filter.add(filter.getDictionary("ru"));
 
-//import i18n from "./i18/i18n";
 
 const init = async (socket) => {
 
@@ -88,7 +91,7 @@ const init = async (socket) => {
         }
 
         return (
-          <MessageIpaContext.Provider value={{ sendMessage, fetchData, addNewChannel, renameChannel, removeChannel }}>
+          <MessageIpaContext.Provider value={{ sendMessage, fetchData, addNewChannel, renameChannel, removeChannel, filter }}>
             {children}
           </MessageIpaContext.Provider>
         );
