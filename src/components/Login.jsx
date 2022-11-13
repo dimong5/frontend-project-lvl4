@@ -39,7 +39,7 @@ const LoginPage = () => {
     onSubmit: async (values) => {
       try {
         const response = await axios.post(
-          "http://localhost:3000/api/v1/login",
+          "/api/v1/login",
           values
         );
         const token = response.data.token;

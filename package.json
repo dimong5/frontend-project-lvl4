@@ -5,7 +5,10 @@
   "main": "src/index.js",
   "proxy": "http://localhost:5001",
   "dependencies": {
+    "-": "^0.0.1",
+    "@hexlet/chat-server": "^1.1.6",
     "@reduxjs/toolkit": "^1.8.3",
+    "@rollbar/react": "^0.11.1",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",
@@ -15,6 +18,7 @@
     "classnames": "^2.3.2",
     "concurrently": "^7.2.2",
     "formik": "^2.2.9",
+    "g": "^2.0.1",
     "http-proxy-middleware": "^2.0.6",
     "i18next": "^21.9.2",
     "leo-profanity": "^1.7.0",
@@ -27,12 +31,13 @@
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
     "react-toastify": "^9.1.1",
+    "serve": "^14.1.1",
     "socket.io-client": "^4.5.1",
     "web-vitals": "^2.1.4",
     "yup": "^0.32.11"
   },
   "scripts": {
-    "start": "concurrently \"react-scripts start -timeout=1000\" \"make -C server start\"",
+    "start": "npx start-server",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

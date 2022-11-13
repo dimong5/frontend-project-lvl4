@@ -59,6 +59,7 @@ const Signup = () => {
           formik.setErrors({
             username: "registrationPage.userAlreadyExist",
           });
+          throw e;
         } else {
           toast.error(t("alertMessage.connectionError"));
         }

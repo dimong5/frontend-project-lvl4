@@ -11,6 +11,9 @@ import { useAuth } from "./hooks";
 import { I18nextProvider } from "react-i18next";
 import initI18Next from "./i18/i18n.js";
 import filter from "leo-profanity";
+import Rollbar from "rollbar";
+import { Provider as RollbarProvider } from '@rollbar/react';
+
 
 filter.add(filter.getDictionary("en"));
 filter.add(filter.getDictionary("fr"));
@@ -18,6 +21,12 @@ filter.add(filter.getDictionary("ru"));
 
 
 const init = async (socket) => {
+
+  const rollbarConfig = {
+    accessToken: '5f3b2f7b890d4349a9f95f36a6885fc7',
+    environment: 'production',
+  };
+  const rollbar = new Rollbar(rollbarConfig);
 
   socket.on('newMessage', (msg) => {
       store.dispatch(addMessage(msg))
@@ -48,7 +57,7 @@ const init = async (socket) => {
 
         const fetchData = async () => {
           try {
-            const res = await axios.get("http://localhost:3000/api/v1/data", {
+            const res = await axios.get("/api/v1/data", {
               headers: auth.getAuthHeader(),
             });
             return res.data;
@@ -98,15 +107,17 @@ const init = async (socket) => {
       };
     
   return (
-    <Provider store={store}>
-      <AuthProvider>
-        <MessageApiProvider>
-          <I18nextProvider i18n={await initI18Next()}>
-            <App />
-          </I18nextProvider>
-        </MessageApiProvider>
-      </AuthProvider>
-    </Provider>
+    <RollbarProvider instance={rollbar}>
+      <Provider store={store}>
+        <AuthProvider>
+          <MessageApiProvider>
+            <I18nextProvider i18n={await initI18Next()}>
+              <App />
+            </I18nextProvider>
+          </MessageApiProvider>
+        </AuthProvider>
+      </Provider>
+    </RollbarProvider>
   );
 };
 

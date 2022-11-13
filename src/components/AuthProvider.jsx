@@ -27,7 +27,7 @@ const AuthProvider = ({ children }) => {
   };
 
   const signUp = async (user) => {
-  return axios.post("http://localhost:3000/api/v1/signup", user);
+  return axios.post("/api/v1/signup", user);
   };
 
   return (

@@ -1,5 +1,8 @@
 start-frontend:
-	npm start
+	npx react-scripts start -timeout=1000
 
 start-backend:
-	cd server && npm start
+	npx start-server -p 5001
+
+start:
+	make start-backend & make start-frontend
