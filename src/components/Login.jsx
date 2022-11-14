@@ -11,13 +11,14 @@ import { useTranslation } from "react-i18next";
 
 const loginSchema = Yup.object().shape({
   username: Yup.string()
+
     .min(2, "Too Short!")
-    .max(50, "Too Long!")
-    .required("Required"),
+    .max(50, "Too Long!"),
   password: Yup.string()
+    .trim()
+    .required("Required")
     .min(2, "Too Short!")
-    .max(50, "Too Long!")
-    .required("Required"),
+    .max(50, "Too Long!"),
 });
 
 const LoginPage = () => {

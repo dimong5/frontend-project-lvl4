@@ -12,12 +12,14 @@ import "react-toastify/dist/ReactToastify.css";
 
 const Schema = Yup.object().shape({
   username: Yup.string()
-    .min(3, "registrationPage.nameSize")
-    .max(20, "registrationPage.nameSize")
-    .required("registrationPage.required"),
+    .trim()
+    .required("registrationPage.required")
+    .min(3, "registrationPage.nameLength")
+    .max(20, "registrationPage.nameLength"),
   password: Yup.string()
-    .min(6, "registrationPage.passwordLengthError")
-    .required("registrationPage.required"),
+    .required("registrationPage.required")
+    .trim()
+    .min(6, "registrationPage.passwordLengthError"),
   confirmPassword: Yup.string().when("password", {
     is: (val) => (val && val.length > 0 ? true : false),
     then: Yup.string().oneOf(

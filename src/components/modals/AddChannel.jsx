@@ -11,9 +11,10 @@ const AddChannel = ({ hideModal }) => {
   const { t } = useTranslation();
   const channelNameSchema = Yup.object().shape({
     channelName: Yup.string()
+      .trim()
+      .required("addChannelModal.required")
       .min(3, "addChannelModal.nameLength")
-      .max(20, "addChannelModal.nameLength")
-      .required("addChannelModal.required"),
+      .max(20, "addChannelModal.nameLength"),
   });
   const api = useMessageApi();
   const input = useRef(null);

@@ -10,9 +10,10 @@ const RenameChannel = ({ hideModal, modalInfo }) => {
   const { t } = useTranslation();
   const channelNameSchema = Yup.object().shape({
     channelName: Yup.string()
+      .trim()
+      .required("renameChannelModal.required")
       .min(3, "renameChannelModal.nameLength")
-      .max(20, "renameChannelModal.nameLength")
-      .required("renameChannelModal.required"),
+      .max(20, "renameChannelModal.nameLength"),
   });
   const api = useMessageApi();
   const currentName = modalInfo.item.name;
