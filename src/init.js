@@ -12,7 +12,7 @@ import { I18nextProvider } from "react-i18next";
 import initI18Next from "./i18/i18n.js";
 import filter from "leo-profanity";
 import Rollbar from "rollbar";
-import { Provider as RollbarProvider } from '@rollbar/react';
+import { Provider as RollbarProvider, ErrorBoundary } from '@rollbar/react';
 
 
 filter.add(filter.getDictionary("en"));
@@ -23,8 +23,10 @@ filter.add(filter.getDictionary("ru"));
 const init = async (socket) => {
 
   const rollbarConfig = {
-    accessToken: '5f3b2f7b890d4349a9f95f36a6885fc7',
-    environment: 'production',
+    accessToken: "5d6cc936bb624a6cbe8692f7d18f6352",
+    environment: "production",
+    captureUncaught: true,
+    captureUnhandledRejections: true,
   };
   const rollbar = new Rollbar(rollbarConfig);
 
@@ -112,7 +114,9 @@ const init = async (socket) => {
         <AuthProvider>
           <MessageApiProvider>
             <I18nextProvider i18n={await initI18Next()}>
-              <App />
+              <ErrorBoundary>
+                <App />
+              </ErrorBoundary>
             </I18nextProvider>
           </MessageApiProvider>
         </AuthProvider>

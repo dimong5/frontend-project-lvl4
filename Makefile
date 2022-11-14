@@ -6,3 +6,6 @@ start-backend:
 
 start:
 	make start-backend & make start-frontend
+
+install:
+	npm install & npm i @hexlet/chat-server

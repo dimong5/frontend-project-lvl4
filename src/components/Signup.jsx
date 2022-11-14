@@ -46,10 +46,7 @@ const Signup = () => {
       };
       try {
         const response = await auth.signUp(user);
-        console.log("signup response", response);
         auth.logOut();
-        console.log("localstorage from signup", localStorage.getItem("user"));
-
         auth.logIn({ username: values.username, token: response.data.token });
         navigate("/", { replace: true });
       } catch (e) {
@@ -59,7 +56,6 @@ const Signup = () => {
           formik.setErrors({
             username: "registrationPage.userAlreadyExist",
           });
-          throw e;
         } else {
           toast.error(t("alertMessage.connectionError"));
         }
