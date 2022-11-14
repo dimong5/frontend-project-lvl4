@@ -105,7 +105,7 @@ const ChannelsBox = ({ currentChannel, setCurrentChannel }) => {
               variant={isActive ? "secondary" : null}
               id="dropdown-split-basic"
             />
-
+            <span className="visually-hidden">Управление каналом</span>
             <Dropdown.Menu>
               <Dropdown.Item onClick={handleRemoveChannel}>
                 {t("channelBox.removeChannel")}
