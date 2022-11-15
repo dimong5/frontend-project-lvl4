@@ -54,7 +54,7 @@ const Chat = () => {
           ) : null}
         </div>
       </div>
-      <ToastContainer />
+
     </ComponentWrapper>
   );
 };
@@ -283,6 +283,7 @@ const ChatBox = ({ currentChannel }) => {
           </form>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };
