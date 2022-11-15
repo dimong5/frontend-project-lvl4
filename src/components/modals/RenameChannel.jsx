@@ -73,7 +73,7 @@ const RenameChannel = ({ hideModal, modalInfo }) => {
               }
             ></FormControl>
             <Form.Label className="visually-hidden" htmlFor="channelName">
-              Имя канала
+              {t("renameChannelModal.channelNameLabel")}
             </Form.Label>
             <FormControl.Feedback type="invalid">
               {t(formik.errors.channelName)}

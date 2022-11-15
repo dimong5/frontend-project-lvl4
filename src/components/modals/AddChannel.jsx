@@ -73,7 +73,7 @@ const AddChannel = ({ hideModal }) => {
               }
             ></FormControl>
             <Form.Label className="visually-hidden" htmlFor="channelName">
-              Имя канала
+              {t("addChannelModal.channelNameLabel")}
             </Form.Label>
             <FormControl.Feedback type="invalid">
               {t(formik.errors.channelName)}

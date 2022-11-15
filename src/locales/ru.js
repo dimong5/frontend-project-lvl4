@@ -11,6 +11,7 @@ const ru = {
       channelsHeader: "Каналы",
       removeChannel: "Удалить",
       renameChannel: "Переименовать",
+      channelControlToggle: "Управление каналом",
     },
     chatBox: {
       messages: {
@@ -19,6 +20,7 @@ const ru = {
         key_many: "{{count}} сообщений",
       },
       messageFieldPlaceholder: "Введите сообщение...",
+      sendMessageButton: "Отправить",
     },
     errorPage: {
       pageNotFound: "Страница не найдена",
@@ -53,6 +55,7 @@ const ru = {
       submitButton: "Отправить",
       cancelButton: "Отменить",
       addChannelFormHeader: "Добавить канал",
+      channelNameLabel: "Имя канала",
     },
     renameChannelModal: {
       nameLength: "От 3 до 20 символов",
@@ -61,6 +64,7 @@ const ru = {
       renameChannelFormHeader: "Переименовать канал",
       submitButton: "Отправить",
       cancelButton: "Отменить",
+      channelNameLabel: "Имя канала",
     },
     removeChannelModal: {
       addChannelFormHeader: "Удалить канал",
