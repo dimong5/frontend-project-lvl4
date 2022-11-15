@@ -76,7 +76,7 @@ const ru = {
     alertMessage: {
       channelAdded: "Канал создан",
       channelRenamed: "Канал переименован",
-      channelRemoved: "Канал удален",
+      channelRemoved: "Канал удалён",
       connectionError: "Ошибка соединения",
     },
   },
