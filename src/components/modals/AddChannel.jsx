@@ -1,50 +1,48 @@
-import { Modal, Form, FormGroup, FormControl, Button } from 'react-bootstrap'
+import {
+  Modal, Form, FormGroup, FormControl, Button,
+} from 'react-bootstrap';
 import { useFormik } from 'formik';
-import { useMessageApi } from '../../hooks';
 import { useRef, useEffect } from 'react';
-import * as Yup from "yup";
-import { useTranslation } from "react-i18next";
+import * as Yup from 'yup';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-
+import { useMessageApi } from '../../hooks';
 
 const AddChannel = ({ hideModal }) => {
   const { t } = useTranslation();
   const channelNameSchema = Yup.object().shape({
     channelName: Yup.string()
       .trim()
-      .required("addChannelModal.required")
-      .min(3, "addChannelModal.nameLength")
-      .max(20, "addChannelModal.nameLength"),
+      .required('addChannelModal.required')
+      .min(3, 'addChannelModal.nameLength')
+      .max(20, 'addChannelModal.nameLength'),
   });
   const api = useMessageApi();
   const input = useRef(null);
   const channels = useSelector((state) => state.channels.channels);
-  const isUniq = (name) => {
-    return channels.findIndex((ch) => ch.name === name) === -1;
-  };
+  const isUniq = (name) => channels.findIndex((ch) => ch.name === name) === -1;
 
   useEffect(() => {
     input.current.focus();
-  }, [input])
-   const formik = useFormik({
-     initialValues: {
-       channelName: '',
-     },
-     validationSchema: channelNameSchema,
-     validateOnBlur: false,
-     validateOnChange: false,
-     onSubmit: values => {
-       if (!isUniq(values.channelName)) {
-         formik.setErrors({ channelName: t("addChannelModal.mustBeUniq") });
-         return;
-       }
+  }, [input]);
+  const formik = useFormik({
+    initialValues: {
+      channelName: '',
+    },
+    validationSchema: channelNameSchema,
+    validateOnBlur: false,
+    validateOnChange: false,
+    onSubmit: (values) => {
+      if (!isUniq(values.channelName)) {
+        formik.setErrors({ channelName: t('addChannelModal.mustBeUniq') });
+        return;
+      }
 
-       api.addNewChannel(values.channelName);
-       values.channelName = "";
-       hideModal(t("alertMessage.channelAdded"));
-     },
-   });
-  
+      api.addNewChannel(values.channelName);
+      hideModal(t('alertMessage.channelAdded'));
+    },
+  });
+
   return (
     <Modal
       show="true"
@@ -54,7 +52,7 @@ const AddChannel = ({ hideModal }) => {
     >
       <Modal.Header closeButton>
         <Modal.Title id="example-custom-modal-styling-title">
-          {t("addChannelModal.addChannelFormHeader")}
+          {t('addChannelModal.addChannelFormHeader')}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -71,9 +69,9 @@ const AddChannel = ({ hideModal }) => {
               isInvalid={
                 formik.errors.channelName && formik.touched.channelName
               }
-            ></FormControl>
+            />
             <Form.Label className="visually-hidden" htmlFor="channelName">
-              {t("addChannelModal.channelNameLabel")}
+              {t('addChannelModal.channelNameLabel')}
             </Form.Label>
             <FormControl.Feedback type="invalid">
               {t(formik.errors.channelName)}
@@ -86,17 +84,16 @@ const AddChannel = ({ hideModal }) => {
               onClick={hideModal}
               variant="secondary"
             >
-              {t("addChannelModal.cancelButton")}
+              {t('addChannelModal.cancelButton')}
             </Button>
             <Button type="submit" variant="primary">
-              {t("addChannelModal.submitButton")}
+              {t('addChannelModal.submitButton')}
             </Button>
           </div>
         </Form>
       </Modal.Body>
     </Modal>
   );
-  
 };
 
 export default AddChannel;

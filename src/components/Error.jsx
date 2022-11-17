@@ -1,8 +1,8 @@
-import React from "react";
-import logo from "../images/page_not_found.svg"
-import { useTranslation } from "react-i18next";
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import logo from '../images/page_not_found.svg';
 
-function Home() {
+const Home = () => {
   const { t } = useTranslation();
   return (
     <div className="h-100">
@@ -21,17 +21,18 @@ function Home() {
               className="img-fluid h-25"
               src={logo}
             />
-            <h1 className="h4 text-muted">{t("errorPage.pageNotFound")}</h1>
+            <h1 className="h4 text-muted">{t('errorPage.pageNotFound')}</h1>
             <p className="text-muted">
-              {t("errorPage.homepageInvitation")}{" "}
-              <a href="/">{t("errorPage.homepageLinkCaption")}</a>
+              {t('errorPage.homepageInvitation')}
+              {' '}
+              <a href="/">{t('errorPage.homepageLinkCaption')}</a>
             </p>
           </div>
         </div>
-        <div className="Toastify"></div>
+        <div className="Toastify" />
       </div>
     </div>
   );
-}
+};
 
 export default Home;

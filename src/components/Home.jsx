@@ -1,23 +1,15 @@
-import React, { useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { setCurrentChannel, setInitialState } from "../slices/channelsSlice";
-import { useMessageApi } from "../hooks";
-import ComponentWrapper from "./ComponentWrapper";
-import { useState } from "react";
-import getModal from "./modals/index";
-import { Button, ButtonGroup, Dropdown } from "react-bootstrap";
-import { useTranslation } from "react-i18next";
-import { useFormik } from "formik";
-import { ToastContainer, toast } from "react-toastify";
+import React, { useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
+import { useFormik } from 'formik';
+import { ToastContainer } from 'react-toastify';
+import { setCurrentChannel, setInitialState } from '../slices/channelsSlice';
+import { useMessageApi } from '../hooks';
+import ComponentWrapper from './ComponentWrapper';
+import ChannelsBox from './ChannelBox';
 
-import "react-toastify/dist/ReactToastify.css";
-
-const renderModal = (modalInfo, hideModal) => {
-  if (!modalInfo.type) return null;
-  const Component = getModal(modalInfo.type);
-  return <Component hideModal={hideModal} modalInfo={modalInfo} />;
-};
+import 'react-toastify/dist/ReactToastify.css';
 
 const Chat = () => {
   const currentChannel = useSelector((state) => state.channels.currentChannel);
@@ -31,7 +23,7 @@ const Chat = () => {
         const data = await api.fetchData();
         dispatch(setInitialState(data));
       } catch (e) {
-        navigate("/login");
+        navigate('/login');
       }
     };
     getData();
@@ -59,134 +51,18 @@ const Chat = () => {
   );
 };
 
-const ChannelsBox = ({ currentChannel, setCurrentChannel }) => {
-  const { t } = useTranslation();
-  const [modalInfo, setModalInfo] = useState({ type: null, item: null });
-  const dispatch = useDispatch();
-
-  const renderChannel = (channel) => {
-    const handleRenameChannel = async (e) => {
-      e.preventDefault();
-      setModalInfo({ type: "renameChannel", item: channel });
-    };
-
-    const handleRemoveChannel = async (e) => {
-      e.preventDefault();
-      setModalInfo({ type: "removeChannel", item: channel.id });
-    };
-
-    const key = channel.id;
-    const isActive = currentChannel === channel.id;
-
-    return (
-      <li className="nav-item w-100" key={key}>
-        {channel.removable ? (
-          <Dropdown
-            as={ButtonGroup}
-            className="d-flex"
-            align="start"
-            autoClose
-            navbar
-          >
-            <Button
-              variant={isActive ? "secondary" : null}
-              className="w-100 rounded-0 text-start text-truncate"
-              onClick={() => {
-                dispatch(setCurrentChannel(channel.id));
-              }}
-            >
-              <span className="me-1">#</span>
-              {channel.name}
-            </Button>
-
-            <Dropdown.Toggle
-              className="flex-grow-0"
-              split
-              variant={isActive ? "secondary" : null}
-              id="dropdown-split-basic"
-            >
-              <span className="visually-hidden">
-                {t("channelBox.channelControlToggle")}
-              </span>
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              <Dropdown.Item onClick={handleRemoveChannel}>
-                {t("channelBox.removeChannel")}
-              </Dropdown.Item>
-              <Dropdown.Item onClick={handleRenameChannel}>
-                {t("channelBox.renameChannel")}
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-        ) : (
-          <Button
-            onClick={() => {
-              dispatch(setCurrentChannel(channel.id));
-            }}
-            className="w-100 rounded-0 text-start"
-            variant={isActive ? "secondary" : null}
-          >
-            <span className="me-1">#</span>
-            {channel.name}
-          </Button>
-        )}
-      </li>
-    );
-  };
-
-  const hideModal = (msg = null) => {
-    setModalInfo({ type: null, item: null });
-    if (msg) {
-      toast(msg);
-    }
-  };
-
-  const channels = useSelector((state) => state.channels.channels);
-  const handleAddChannel = async (e) => {
-    e.preventDefault();
-    setModalInfo({ type: "addChannel", item: null });
-  };
-
-  return (
-    <div className="col-4 col-md-2 border-end pt-5 px-0 bg-light">
-      <div className="d-flex justify-content-between mb-2 ps-4 pe-2">
-        <span>{t("channelBox.channelsHeader")}</span>
-        <button
-          onClick={handleAddChannel}
-          type="button"
-          className="p-0 text-primary btn btn-group-vertical"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 16 16"
-            width={20}
-            height={20}
-            fill="currentColor"
-          >
-            <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
-            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
-          </svg>
-          <span className="visually-hidden">+</span>
-        </button>
-      </div>
-      <ul className="nav flex-column nav-pills nav-fill px-2">
-        {channels.map((channel) =>
-          renderChannel(channel, currentChannel, setCurrentChannel)
-        )}
-      </ul>
-      {renderModal(modalInfo, hideModal)}
-    </div>
-  );
-};
-
 const ChatBox = ({ currentChannel }) => {
-  const filter = useMessageApi().filter;
+  const { filter } = useMessageApi();
 
   const renderMessage = (mes) => {
     const { message, user, id } = mes;
     return (
       <div className="text-break mb-2 float-left" key={id}>
-        <b>{user}</b>: {filter.clean(message)}
+        <b>
+          {user}
+        </b>
+        :
+        {filter.clean(message)}
       </div>
     );
   };
@@ -198,9 +74,9 @@ const ChatBox = ({ currentChannel }) => {
   const inputMessageRef = useRef();
   const messages = useSelector((state) => state.messages.value);
   const currentChannelMessages = messages.filter(
-    (message) => message.channelId === currentChannel
+    (message) => message.channelId === currentChannel,
   );
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(localStorage.getItem('user'));
   const api = useMessageApi();
 
   useEffect(() => {
@@ -210,7 +86,7 @@ const ChatBox = ({ currentChannel }) => {
 
   const formik = useFormik({
     initialValues: {
-      messageText: "",
+      messageText: '',
     },
     onSubmit: async (values, { resetForm }) => {
       api.sendMessage(values.messageText, user.username, currentChannel);
@@ -223,10 +99,14 @@ const ChatBox = ({ currentChannel }) => {
       <div className="d-flex flex-column h-100">
         <div className="bg-light mb-4 p-3 shadow-sm small">
           <p className="m-0">
-            <b># {channel?.name || null}</b>
+            <b>
+              #
+              {' '}
+              {channel?.name || null}
+            </b>
           </p>
           <span className="text-muted">
-            {t("chatBox.messages.key", {
+            {t('chatBox.messages.key', {
               count: currentChannelMessages.length,
             })}
           </span>
@@ -251,7 +131,7 @@ const ChatBox = ({ currentChannel }) => {
                 ref={inputMessageRef}
                 name="messageText"
                 aria-label="Новое сообщение"
-                placeholder={t("chatBox.messageFieldPlaceholder")}
+                placeholder={t('chatBox.messageFieldPlaceholder')}
                 className="border-0 p-0 ps-2 form-control"
                 value={formik.values.messageText}
                 onChange={formik.handleChange}
@@ -260,7 +140,7 @@ const ChatBox = ({ currentChannel }) => {
                 type="submit"
                 className="btn btn-group-vertical"
                 disabled={
-                  formik.values.messageText === "" || formik.isSubmitting
+                  formik.values.messageText === '' || formik.isSubmitting
                 }
               >
                 <svg
@@ -276,7 +156,7 @@ const ChatBox = ({ currentChannel }) => {
                   />
                 </svg>
                 <span className="visually-hidden">
-                  {t("chatBox.sendMessageButton")}
+                  {t('chatBox.sendMessageButton')}
                 </span>
               </button>
             </div>
@@ -288,8 +168,6 @@ const ChatBox = ({ currentChannel }) => {
   );
 };
 
-function Home() {
-  return <Chat />;
-}
+const Home = () => <Chat />;
 
 export default Home;

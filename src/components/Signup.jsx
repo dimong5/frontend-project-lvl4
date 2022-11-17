@@ -1,30 +1,32 @@
-import React from "react";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import { Form, FormGroup, FormControl, Button } from "react-bootstrap";
-import logo from "../images/registration_logo.jpg";
-import { useAuth } from "../hooks";
-import { useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-import NavBar from "./Nav";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import React from 'react';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import {
+  Form, FormGroup, FormControl, Button,
+} from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { ToastContainer, toast } from 'react-toastify';
+import logo from '../images/registration_logo.jpg';
+import { useAuth } from '../hooks';
+import NavBar from './Nav';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Schema = Yup.object().shape({
   username: Yup.string()
     .trim()
-    .required("registrationPage.required")
-    .min(3, "registrationPage.nameLength")
-    .max(20, "registrationPage.nameLength"),
+    .required('registrationPage.required')
+    .min(3, 'registrationPage.nameLength')
+    .max(20, 'registrationPage.nameLength'),
   password: Yup.string()
-    .required("registrationPage.required")
+    .required('registrationPage.required')
     .trim()
-    .min(6, "registrationPage.passwordLengthError"),
-  confirmPassword: Yup.string().when("password", {
-    is: (val) => (val && val.length > 0 ? true : false),
+    .min(6, 'registrationPage.passwordLengthError'),
+  confirmPassword: Yup.string().when('password', {
+    is: (val) => (!!(val && val.length > 0)),
     then: Yup.string().oneOf(
-      [Yup.ref("password")],
-      "registrationPage.passwordComfirmationError"
+      [Yup.ref('password')],
+      'registrationPage.passwordComfirmationError',
     ),
   }),
 });
@@ -35,9 +37,9 @@ const Signup = () => {
   const auth = useAuth();
   const formik = useFormik({
     initialValues: {
-      username: "",
-      password: "",
-      confirmPassword: "",
+      username: '',
+      password: '',
+      confirmPassword: '',
     },
     validationSchema: Schema,
     onSubmit: async (values) => {
@@ -50,16 +52,16 @@ const Signup = () => {
         const response = await auth.signUp(user);
         auth.logOut();
         auth.logIn({ username: values.username, token: response.data.token });
-        navigate("/", { replace: true });
+        navigate('/', { replace: true });
       } catch (e) {
         const { status } = e.response;
         console.log(status);
         if (status === 409) {
           formik.setErrors({
-            username: "registrationPage.userAlreadyExist",
+            username: 'registrationPage.userAlreadyExist',
           });
         } else {
-          toast.error(t("alertMessage.connectionError"));
+          toast.error(t('alertMessage.connectionError'));
         }
       }
     },
@@ -84,7 +86,7 @@ const Signup = () => {
 
                   <Form onSubmit={formik.handleSubmit} className="w-50">
                     <h1 className="text-center mb-4">
-                      {t("registrationPage.regFormHeader")}
+                      {t('registrationPage.regFormHeader')}
                     </h1>
                     <FormGroup className="form-floating mb-3">
                       <FormControl
@@ -97,9 +99,9 @@ const Signup = () => {
                         isInvalid={
                           formik.errors.username && formik.touched.username
                         }
-                      ></FormControl>
+                      />
                       <Form.Label htmlFor="username">
-                        {t("registrationPage.loginPlaceholder")}
+                        {t('registrationPage.loginPlaceholder')}
                       </Form.Label>
                       <FormControl.Feedback type="invalid" tooltip>
                         {t(formik.errors.username)}
@@ -116,9 +118,9 @@ const Signup = () => {
                         isInvalid={
                           formik.errors.password && formik.touched.password
                         }
-                      ></FormControl>
+                      />
                       <Form.Label htmlFor="password">
-                        {t("registrationPage.passwordPlaceholder")}
+                        {t('registrationPage.passwordPlaceholder')}
                       </Form.Label>
                       <FormControl.Feedback type="invalid" tooltip>
                         {t(formik.errors.password)}
@@ -133,12 +135,12 @@ const Signup = () => {
                         value={formik.values.confirmPassword}
                         onBlur={formik.handleBlur}
                         isInvalid={
-                          formik.errors.confirmPassword &&
-                          formik.touched.confirmPassword
+                          formik.errors.confirmPassword
+                          && formik.touched.confirmPassword
                         }
-                      ></FormControl>
+                      />
                       <Form.Label htmlFor="confirmPassword">
-                        {t("registrationPage.passwordConfirmationPlaceholder")}
+                        {t('registrationPage.passwordConfirmationPlaceholder')}
                       </Form.Label>
                       <FormControl.Feedback type="invalid" tooltip>
                         {t(formik.errors.confirmPassword)}
@@ -149,7 +151,7 @@ const Signup = () => {
                       variant="outline-primary"
                       type="submit"
                     >
-                      {t("registrationPage.submitButton")}
+                      {t('registrationPage.submitButton')}
                     </Button>
                   </Form>
                 </div>

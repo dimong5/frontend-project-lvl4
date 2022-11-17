@@ -1,6 +1,6 @@
-import AddChannel from "./AddChannel";
-import RenameChannel from "./RenameChannel";
-import RemoveChannel from "./RemoveChannel";
+import AddChannel from './AddChannel';
+import RenameChannel from './RenameChannel';
+import RemoveChannel from './RemoveChannel';
 
 const modals = {
   addChannel: AddChannel,
@@ -8,6 +8,6 @@ const modals = {
   removeChannel: RemoveChannel,
 };
 
-const modal = (modal) => modals[modal];
+const modal = (type) => modals[type];
 
 export default modal;

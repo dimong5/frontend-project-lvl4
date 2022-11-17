@@ -1,24 +1,24 @@
-import axios from "axios";
-import React, { useEffect, useRef } from "react";
-import * as Yup from "yup";
-import { useFormik } from "formik";
-import { Form } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../hooks/index.js";
-import NavBar from "./Nav";
-import logo from "../images/login.jpeg";
-import { useTranslation } from "react-i18next";
+import axios from 'axios';
+import React, { useEffect, useRef } from 'react';
+import * as Yup from 'yup';
+import { useFormik } from 'formik';
+import { Form } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { useAuth } from '../hooks/index.js';
+import NavBar from './Nav';
+import logo from '../images/login.jpeg';
 
 const loginSchema = Yup.object().shape({
   username: Yup.string()
 
-    .min(2, "Too Short!")
-    .max(50, "Too Long!"),
+    .min(2, 'Too Short!')
+    .max(50, 'Too Long!'),
   password: Yup.string()
     .trim()
-    .required("Required")
-    .min(2, "Too Short!")
-    .max(50, "Too Long!"),
+    .required('Required')
+    .min(2, 'Too Short!')
+    .max(50, 'Too Long!'),
 });
 
 const LoginPage = () => {
@@ -33,21 +33,21 @@ const LoginPage = () => {
   const navigate = useNavigate();
 
   const formik = useFormik({
-    initialValues: { username: "", password: "" },
+    initialValues: { username: '', password: '' },
     validationSchema: loginSchema,
     validateOnChange: false,
     validateOnBlur: false,
     onSubmit: async (values) => {
       try {
         const response = await axios.post(
-          "/api/v1/login",
-          values
+          '/api/v1/login',
+          values,
         );
-        const token = response.data.token;
+        const { token } = response.data;
         auth.logIn({ username: values.username, token });
-        navigate("../", { replace: true });
+        navigate('../', { replace: true });
       } catch (err) {
-        formik.setErrors({ username: "loginPage.loginOrPasswordError" });
+        formik.setErrors({ username: 'loginPage.loginOrPasswordError' });
       }
     },
   });
@@ -70,7 +70,7 @@ const LoginPage = () => {
                       className="col-12 col-md-6 mt-3 mt-mb-0"
                     >
                       <h1 className="text-center mb-4">
-                        {t("loginPage.loginHeader")}
+                        {t('loginPage.loginHeader')}
                       </h1>
                       <Form.Group className="form-floating mb-3">
                         <Form.Control
@@ -85,7 +85,7 @@ const LoginPage = () => {
                           ref={input}
                         />
                         <Form.Label className="form-label" htmlFor="username">
-                          {t("loginPage.usernamePlaceholder")}
+                          {t('loginPage.usernamePlaceholder')}
                         </Form.Label>
                       </Form.Group>
                       <Form.Group className="form-floating mb-3">
@@ -104,7 +104,7 @@ const LoginPage = () => {
                           type="password"
                         />
                         <Form.Label className="form-label" htmlFor="password">
-                          {t("loginPage.passwordPlaceholder")}
+                          {t('loginPage.passwordPlaceholder')}
                         </Form.Label>
                         <Form.Control.Feedback className="invalid-tooltip">
                           {t(formik.errors.username)}
@@ -114,14 +114,14 @@ const LoginPage = () => {
                         type="submit"
                         className="w-100 mb-3 btn btn-outline-primary"
                       >
-                        {t("loginPage.submitButton")}
+                        {t('loginPage.submitButton')}
                       </button>
                     </Form>
                   </div>
                   <div className="card-footer p-4">
                     <div className="text-center">
-                      <span>{t("loginPage.noAccount")}</span>
-                      <a href="/signup">{t("loginPage.registration")}</a>
+                      <span>{t('loginPage.noAccount')}</span>
+                      <a href="/signup">{t('loginPage.registration')}</a>
                     </div>
                   </div>
                 </div>
@@ -129,7 +129,7 @@ const LoginPage = () => {
             </div>
           </div>
         </div>
-        <div className="Toastify"></div>
+        <div className="Toastify" />
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 import React from 'react';
-import { useAuth } from '../hooks';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '../hooks';
 
 const NavBar = ({ parentComponent }) => {
   const { t } = useTranslation();
@@ -10,8 +10,8 @@ const NavBar = ({ parentComponent }) => {
   const handleClick = (e) => {
     e.preventDefault();
     auth.logOut();
-    if ((parentComponent !== "Signup")|| (parentComponent !== "Login")) {
-      navigate("/login");
+    if ((parentComponent !== 'Signup') || (parentComponent !== 'Login')) {
+      navigate('/login');
     }
   };
 
