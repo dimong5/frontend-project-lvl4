@@ -62,7 +62,7 @@ const init = async (socket) => {
         return res.data;
       } catch (err) {
         if (err.response?.status === 401) {
-          return err;
+          throw err;
         }
         return err;
       }
