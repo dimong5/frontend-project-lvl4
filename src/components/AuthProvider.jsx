@@ -17,9 +17,9 @@ const AuthProvider = ({ children }) => {
   }, [user]);
 
   const logIn = useCallback((userObj) => {
-    localStorage.setItem('user', JSON.stringify(user));
+    localStorage.setItem('user', JSON.stringify(userObj));
     setUser({ username: userObj.username });
-  }, [user]);
+  }, []);
 
   const logOut = () => {
     localStorage.removeItem('user');
