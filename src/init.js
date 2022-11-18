@@ -64,7 +64,7 @@ const init = async (socket) => {
         if (err.response?.status === 401) {
           throw err;
         }
-        return err;
+        throw err;
       }
     }, [auth]);
 
