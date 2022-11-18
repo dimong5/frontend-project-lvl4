@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import { Provider } from 'react-redux';
 import axios from 'axios';
 import { I18nextProvider } from 'react-i18next';
@@ -54,7 +54,7 @@ const init = async (socket) => {
       );
     };
 
-    const fetchData = async () => {
+    const fetchData = useCallback(async () => {
       try {
         const res = await axios.get('/api/v1/data', {
           headers: auth.getAuthHeader(),
@@ -64,9 +64,9 @@ const init = async (socket) => {
         if (err.response?.status === 401) {
           return err;
         }
+        return err;
       }
-      return null;
-    };
+    }, [auth]);
 
     const addNewChannel = async (channelName) => {
       await socket.volatile.emit(
@@ -99,14 +99,14 @@ const init = async (socket) => {
       );
     };
 
-    const ipaContextValues = useMemo({
+    const ipaContextValues = useMemo(() => ({
       sendMessage,
       fetchData,
       addNewChannel,
       renameChannel: renameChnl,
       removeChannel: removeChnl,
       filter,
-    });
+    }), [fetchData]);
 
     return (
       <MessageIpaContext.Provider value={ipaContextValues}>

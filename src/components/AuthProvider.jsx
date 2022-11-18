@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import axios from 'axios';
 import AuthContext from '../context';
 
@@ -8,19 +8,19 @@ const AuthProvider = ({ children }) => {
     currentUser ? { username: currentUser.username } : null,
   );
 
-  const getAuthHeader = () => {
+  const getAuthHeader = useCallback(() => {
     const { token } = JSON.parse(localStorage.getItem('user'));
     if (user && token) {
       return { Authorization: `Bearer ${token}` };
     }
-
     return {};
-  };
+  }, [user]);
 
-  const logIn = (userObj) => {
+  const logIn = useCallback((userObj) => {
     localStorage.setItem('user', JSON.stringify(user));
     setUser({ username: userObj.username });
-  };
+  }, [user]);
+
   const logOut = () => {
     localStorage.removeItem('user');
     setUser(null);
@@ -28,15 +28,13 @@ const AuthProvider = ({ children }) => {
 
   const signUp = async (userObj) => axios.post('/api/v1/signup', userObj);
 
-  const authContextValues = useMemo(
-    () => ({
-      logIn,
-      logOut,
-      signUp,
-      user,
-      getAuthHeader,
-    }),
-  );
+  const authContextValues = useMemo(() => ({
+    logIn,
+    logOut,
+    signUp,
+    user,
+    getAuthHeader,
+  }), [getAuthHeader, logIn, user]);
 
   return (
     <AuthContext.Provider value={authContextValues}>
