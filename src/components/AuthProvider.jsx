@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import axios from 'axios';
 import AuthContext from '../context';
 
@@ -28,13 +28,16 @@ const AuthProvider = ({ children }) => {
 
   const signUp = async (userObj) => axios.post('/api/v1/signup', userObj);
 
-  const authContextValues = useMemo(() => ({
-    logIn,
-    logOut,
-    signUp,
-    user,
-    getAuthHeader,
-  }), [getAuthHeader, logIn, user]);
+  const authContextValues = useMemo(
+    () => ({
+      logIn,
+      logOut,
+      signUp,
+      user,
+      getAuthHeader,
+    }),
+    [getAuthHeader, logIn, user],
+  );
 
   return (
     <AuthContext.Provider value={authContextValues}>

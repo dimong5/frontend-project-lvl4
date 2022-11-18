@@ -2,7 +2,7 @@ import {
   Modal, Form, FormGroup, FormControl, Button,
 } from 'react-bootstrap';
 import { useFormik } from 'formik';
-import { useRef, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
