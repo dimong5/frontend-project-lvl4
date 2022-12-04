@@ -1,30 +1,36 @@
-import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button, ButtonGroup, Dropdown } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
 import getModal from './modals/index';
+import { getChannels, getModalState } from '../selectors';
+import {
+  showAddChannelModal,
+  showRemoveChannelModal,
+  showRenameChannelModal,
+}
+  from '../slices/modalSlice';
 
-const renderModal = (modalInfo, hideModal) => {
-  if (!modalInfo.type) return null;
-  const Component = getModal(modalInfo.type);
-  return <Component hideModal={hideModal} modalInfo={modalInfo} />;
+const renderModal = (modalState) => {
+  const { type } = modalState;
+  if (!type) return null;
+  const Component = getModal(type);
+  return <Component />;
 };
 
 const ChannelsBox = ({ currentChannel, setCurrentChannel }) => {
   const { t } = useTranslation();
-  const [modalInfo, setModalInfo] = useState({ type: null, item: null });
   const dispatch = useDispatch();
 
   const renderChannel = (channel) => {
     const handleRenameChannel = async (e) => {
       e.preventDefault();
-      setModalInfo({ type: 'renameChannel', item: channel });
+      dispatch(showRenameChannelModal({ item: channel }));
     };
 
     const handleRemoveChannel = async (e) => {
       e.preventDefault();
-      setModalInfo({ type: 'removeChannel', item: channel.id });
+      dispatch(showRemoveChannelModal({ item: channel.id }));
     };
 
     const key = channel.id;
@@ -86,17 +92,10 @@ const ChannelsBox = ({ currentChannel, setCurrentChannel }) => {
     );
   };
 
-  const hideModal = (msg = null) => {
-    setModalInfo({ type: null, item: null });
-    if (msg) {
-      toast(msg);
-    }
-  };
-
-  const channels = useSelector((state) => state.channels.channels);
+  const channels = useSelector(getChannels());
   const handleAddChannel = async (e) => {
     e.preventDefault();
-    setModalInfo({ type: 'addChannel', item: null });
+    dispatch(showAddChannelModal({ item: null }));
   };
 
   return (
@@ -124,7 +123,7 @@ const ChannelsBox = ({ currentChannel, setCurrentChannel }) => {
       <ul className="nav flex-column nav-pills nav-fill px-2">
         {channels.map((channel) => renderChannel(channel, currentChannel, setCurrentChannel))}
       </ul>
-      {renderModal(modalInfo, hideModal)}
+      {renderModal(useSelector(getModalState()))}
     </div>
   );
 };

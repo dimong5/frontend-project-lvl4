@@ -5,10 +5,14 @@ import { useFormik } from 'formik';
 import React, { useRef, useEffect } from 'react';
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
-import { useMessageApi } from '../../hooks';
+import { toast } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux';
+import { useApi } from '../../hooks';
+import { getChannels, getModalState } from '../../selectors';
+import { hideModal } from '../../slices/modalSlice';
 
-const RenameChannel = ({ hideModal, modalInfo }) => {
+const RenameChannel = () => {
+  const dispatch = useDispatch();
   const { t } = useTranslation();
   const channelNameSchema = Yup.object().shape({
     channelName: Yup.string()
@@ -17,10 +21,11 @@ const RenameChannel = ({ hideModal, modalInfo }) => {
       .min(3, 'renameChannelModal.nameLength')
       .max(20, 'renameChannelModal.nameLength'),
   });
-  const api = useMessageApi();
-  const currentName = modalInfo.item.name;
+  const api = useApi();
+  const { item } = useSelector(getModalState());
+  const { name: currentName, id } = item;
   const input = useRef(null);
-  const channels = useSelector((state) => state.channels.channels);
+  const channels = useSelector(getChannels());
   const isUniq = (name) => channels.findIndex((ch) => ch.name === name) === -1;
 
   useEffect(() => {
@@ -34,13 +39,14 @@ const RenameChannel = ({ hideModal, modalInfo }) => {
     validationSchema: channelNameSchema,
     validateOnBlur: false,
     validateOnChange: false,
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       if (!isUniq(values.channelName)) {
         formik.setErrors({ channelName: t('renameChannelModal.mustBeUniq') });
         return;
       }
-      api.renameChannel(values.channelName, modalInfo.item.id);
-      hideModal(t('alertMessage.channelRenamed'));
+      await api.renameChannel({ name: values.channelName, id });
+      dispatch(hideModal());
+      toast.success(t('alertMessage.channelRenamed'));
     },
   });
 
@@ -82,7 +88,7 @@ const RenameChannel = ({ hideModal, modalInfo }) => {
             <Button
               type="button"
               className="me-2"
-              onClick={hideModal}
+              onClick={() => dispatch(hideModal())}
               variant="secondary"
             >
               {t('renameChannelModal.cancelButton')}

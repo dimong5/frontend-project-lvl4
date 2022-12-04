@@ -1,30 +1,30 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
+import { remove } from 'lodash';
 import { removeChannel, setInitialState } from './channelsSlice';
 
 const initialState = {
-  value: [],
+  messages: [],
 };
 
 const messagesSlice = createSlice({
   name: 'messages',
   initialState,
   reducers: {
-    addOne: (state, action) => {
-      state.value = [...state.value, action.payload];
+    addMessage: (state, action) => {
+      state.messages = [...state.messages, action.payload];
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(setInitialState, (state, action) => {
-        state.value = action.payload.messages;
+        state.messages = action.payload.messages;
       })
       .addCase(removeChannel, (state, action) => {
-        const newState = state.value.filter((message) => message.channelId !== action.payload);
-        state.value = newState;
+        state.messages = remove(state.messages, (message) => message.channelId !== action.payload);
       });
   },
 });
 
-export const { addOne, addMany, removeMessage } = messagesSlice.actions;
+export const { addMessage } = messagesSlice.actions;
 export default messagesSlice.reducer;

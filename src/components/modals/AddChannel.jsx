@@ -5,10 +5,14 @@ import { useFormik } from 'formik';
 import React, { useRef, useEffect } from 'react';
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
-import { useMessageApi } from '../../hooks';
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import { useApi } from '../../hooks';
+import { getChannels } from '../../selectors';
+import { hideModal } from '../../slices/modalSlice';
 
-const AddChannel = ({ hideModal }) => {
+const AddChannel = () => {
+  const dispatch = useDispatch();
   const { t } = useTranslation();
   const channelNameSchema = Yup.object().shape({
     channelName: Yup.string()
@@ -17,9 +21,9 @@ const AddChannel = ({ hideModal }) => {
       .min(3, 'addChannelModal.nameLength')
       .max(20, 'addChannelModal.nameLength'),
   });
-  const api = useMessageApi();
+  const api = useApi();
   const input = useRef(null);
-  const channels = useSelector((state) => state.channels.channels);
+  const channels = useSelector(getChannels());
   const isUniq = (name) => channels.findIndex((ch) => ch.name === name) === -1;
 
   useEffect(() => {
@@ -38,15 +42,16 @@ const AddChannel = ({ hideModal }) => {
         return;
       }
 
-      api.addNewChannel(values.channelName);
-      hideModal(t('alertMessage.channelAdded'));
+      api.addNewChannel({ name: values.channelName });
+      dispatch(hideModal());
+      toast.success(t('alertMessage.channelAdded'));
     },
   });
 
   return (
     <Modal
       show="true"
-      onHide={() => hideModal()}
+      onHide={() => dispatch(hideModal())}
       dialogClassName="modal-90w"
       aria-labelledby="example-custom-modal-styling-title"
     >
@@ -81,7 +86,7 @@ const AddChannel = ({ hideModal }) => {
             <Button
               type="button"
               className="me-2"
-              onClick={hideModal}
+              onClick={() => dispatch(hideModal())}
               variant="secondary"
             >
               {t('addChannelModal.cancelButton')}

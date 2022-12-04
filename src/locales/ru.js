@@ -6,6 +6,7 @@ const ru = {
     },
     nav: {
       logout: 'Выйти',
+      hexletChatHeader: 'Hexlet chat',
     },
     channelBox: {
       channelsHeader: 'Каналы',

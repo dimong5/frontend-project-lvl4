@@ -1,18 +1,22 @@
 import React from 'react';
 import '../App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Home from './Home.jsx';
+import ChatPage from './ChatPage.jsx';
 import Login from './Login.jsx';
-import Error from './Error.jsx';
-import Signup from './Signup.jsx';
+import NotFoundPage from './NotFoundPage';
+import Registration from './Registration';
+import PrivateOutlet from './PrivatOutlet';
+import routes from '../routes/routes';
 
 const App = () => (
   <Router>
     <Routes>
-      <Route path="/" exact element={<Home />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<Signup />} />
-      <Route path="*" element={<Error />} />
+      <Route path={routes.chatPagePath()} element={<PrivateOutlet />}>
+        <Route index element={<ChatPage />} />
+      </Route>
+      <Route path={routes.loginPagePath()} element={<Login />} />
+      <Route path={routes.registrationPagePath()} element={<Registration />} />
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   </Router>
 );

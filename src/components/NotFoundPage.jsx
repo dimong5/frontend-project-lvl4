@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import logo from '../images/page_not_found.svg';
 
-const Home = () => {
+const NotFoundPage = () => {
   const { t } = useTranslation();
   return (
     <div className="h-100">
@@ -35,4 +35,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default NotFoundPage;

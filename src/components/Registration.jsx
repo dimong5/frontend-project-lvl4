@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { ToastContainer, toast } from 'react-toastify';
 import logo from '../images/registration_logo.jpg';
 import { useAuth } from '../hooks';
-import NavBar from './Nav';
+import NavBar from './Navbar';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Schema = Yup.object().shape({
@@ -23,7 +23,7 @@ const Schema = Yup.object().shape({
     .trim()
     .min(6, 'registrationPage.passwordLengthError'),
   confirmPassword: Yup.string().when('password', {
-    is: (val) => (!!(val && val.length > 0)),
+    is: (val) => !!(val && val.length > 0),
     then: Yup.string().oneOf(
       [Yup.ref('password')],
       'registrationPage.passwordComfirmationError',
@@ -31,7 +31,7 @@ const Schema = Yup.object().shape({
   }),
 });
 
-const Signup = () => {
+const Registration = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const auth = useAuth();
@@ -43,7 +43,6 @@ const Signup = () => {
     },
     validationSchema: Schema,
     onSubmit: async (values) => {
-      console.log(values);
       const user = {
         username: values.username,
         password: values.password,
@@ -55,7 +54,6 @@ const Signup = () => {
         navigate('/', { replace: true });
       } catch (e) {
         const { status } = e.response;
-        console.log(status);
         if (status === 409) {
           formik.setErrors({
             username: 'registrationPage.userAlreadyExist',
@@ -165,4 +163,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default Registration;

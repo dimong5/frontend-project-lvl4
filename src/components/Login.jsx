@@ -6,7 +6,7 @@ import { Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../hooks/index.js';
-import NavBar from './Nav';
+import NavBar from './Navbar';
 import logo from '../images/login.jpeg';
 
 const loginSchema = Yup.object().shape({
@@ -39,10 +39,7 @@ const LoginPage = () => {
     validateOnBlur: false,
     onSubmit: async (values) => {
       try {
-        const response = await axios.post(
-          '/api/v1/login',
-          values,
-        );
+        const response = await axios.post('/api/v1/login', values);
         const { token } = response.data;
         auth.logIn({ username: values.username, token });
         navigate('../', { replace: true });

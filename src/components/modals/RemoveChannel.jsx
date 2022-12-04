@@ -1,22 +1,28 @@
 import React from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { useMessageApi } from '../../hooks';
+import { toast } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux';
+import { useApi } from '../../hooks';
+import { getModalState } from '../../selectors';
+import { hideModal } from '../../slices/modalSlice';
 
-const RemoveChannel = ({ hideModal, modalInfo }) => {
+const RemoveChannel = () => {
+  const dispatch = useDispatch();
   const { t } = useTranslation();
-  const id = modalInfo.item;
-  const api = useMessageApi();
+  const id = useSelector(getModalState()).item;
+  const api = useApi();
 
   const handleSubmit = () => {
-    api.removeChannel(id);
-    hideModal(t('alertMessage.channelRemoved'));
+    api.removeChannel({ id });
+    dispatch(hideModal());
+    toast.success(t('alertMessage.channelRemoved'));
   };
 
   return (
     <Modal
       show="true"
-      onHide={() => hideModal()}
+      onHide={() => dispatch(hideModal())}
       dialogClassName="modal-90w"
       aria-labelledby="example-custom-modal-styling-title"
     >
@@ -32,7 +38,7 @@ const RemoveChannel = ({ hideModal, modalInfo }) => {
             <Button
               type="button"
               className="me-2"
-              onClick={hideModal}
+              onClick={() => dispatch(hideModal())}
               variant="secondary"
             >
               {t('removeChannelModal.cancelButton')}

@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import axios from 'axios';
-import AuthContext from '../context';
+import { AuthContext } from '../context';
 
 const AuthProvider = ({ children }) => {
   const currentUser = JSON.parse(localStorage.getItem('user'));
