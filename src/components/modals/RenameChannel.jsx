@@ -22,10 +22,10 @@ const RenameChannel = () => {
       .max(20, 'renameChannelModal.nameLength'),
   });
   const api = useApi();
-  const { item } = useSelector(getModalState());
+  const { item } = useSelector(getModalState);
   const { name: currentName, id } = item;
   const input = useRef(null);
-  const channels = useSelector(getChannels());
+  const channels = useSelector(getChannels);
   const isUniq = (name) => channels.findIndex((ch) => ch.name === name) === -1;
 
   useEffect(() => {

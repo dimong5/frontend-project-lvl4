@@ -1,1 +1,1 @@
-export default () => (state) => state.modal;
+export default (state) => state.modal;

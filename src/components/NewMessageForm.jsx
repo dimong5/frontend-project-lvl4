@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { useApi } from '../hooks';
+import { useApi, useAuth } from '../hooks';
 import { getCurrentChannel } from '../selectors';
 
 const NewMessageForm = () => {
@@ -11,8 +11,8 @@ const NewMessageForm = () => {
     inputMessageRef.current.focus();
   });
 
-  const currentChannel = useSelector(getCurrentChannel());
-  const user = JSON.parse(localStorage.getItem('user'));
+  const currentChannel = useSelector(getCurrentChannel);
+  const { user } = useAuth();
   const api = useApi();
   const { t } = useTranslation();
   const formik = useFormik({

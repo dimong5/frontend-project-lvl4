@@ -23,7 +23,7 @@ const AddChannel = () => {
   });
   const api = useApi();
   const input = useRef(null);
-  const channels = useSelector(getChannels());
+  const channels = useSelector(getChannels);
   const isUniq = (name) => channels.findIndex((ch) => ch.name === name) === -1;
 
   useEffect(() => {

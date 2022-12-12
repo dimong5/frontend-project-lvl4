@@ -8,17 +8,13 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '../hooks/index.js';
 import NavBar from './Navbar';
 import logo from '../images/login.jpeg';
+import routes from '../routes/routes';
 
 const loginSchema = Yup.object().shape({
   username: Yup.string()
-
-    .min(2, 'Too Short!')
-    .max(50, 'Too Long!'),
+    .trim(),
   password: Yup.string()
-    .trim()
-    .required('Required')
-    .min(2, 'Too Short!')
-    .max(50, 'Too Long!'),
+    .trim(),
 });
 
 const LoginPage = () => {
@@ -42,7 +38,7 @@ const LoginPage = () => {
         const response = await axios.post('/api/v1/login', values);
         const { token } = response.data;
         auth.logIn({ username: values.username, token });
-        navigate('../', { replace: true });
+        navigate(routes.chatPagePath(), { replace: true });
       } catch (err) {
         formik.setErrors({ username: 'loginPage.loginOrPasswordError' });
       }

@@ -13,32 +13,28 @@ import routes from '../routes/routes';
 import 'react-toastify/dist/ReactToastify.css';
 
 const ChatPage = () => {
-  const currentChannel = useSelector(getCurrentChannel());
+  const currentChannel = useSelector(getCurrentChannel);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const auth = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await axios.get(routes.dataPath(), {
-        headers: auth.getAuthHeader(),
-      });
-      return res.data;
-    };
-    const getData = async () => {
       try {
-        const data = await fetchData();
+        const { data } = await axios.get(routes.dataPath(), {
+          headers: auth.getAuthHeader(),
+        });
         dispatch(setInitialState(data));
       } catch (err) {
         if (err.response?.status === 401) {
-          navigate('/login');
+          navigate(routes.loginPagePath());
         }
       }
     };
-    getData();
+    fetchData();
   }, [dispatch, navigate, auth]);
 
-  const channels = useSelector(getChannels());
+  const channels = useSelector(getChannels);
 
   return (
     <div className="h-100">

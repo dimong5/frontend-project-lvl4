@@ -4,13 +4,16 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useApi } from '../hooks';
 import NewMessageForm from './NewMessageForm';
-import { getChannels, getMessages } from '../selectors';
+import {
+  getChannels,
+  getCurrentChannel,
+  getCurrentChannelMessages,
+} from '../selectors';
 
 import 'react-toastify/dist/ReactToastify.css';
 
-const ChatBox = ({ currentChannel }) => {
+const ChatBox = () => {
   const { filter } = useApi();
-
   const renderMessage = (mes) => {
     const { message, user, id } = mes;
     return (
@@ -21,15 +24,12 @@ const ChatBox = ({ currentChannel }) => {
       </div>
     );
   };
-
+  const currentChannel = useSelector(getCurrentChannel);
   const { t } = useTranslation();
-  const channels = useSelector(getChannels());
+  const channels = useSelector(getChannels);
   const channel = channels.find((ch) => ch.id === currentChannel);
   const chatBoxRef = useRef();
-  const messages = useSelector(getMessages());
-  const currentChannelMessages = messages.filter(
-    (message) => message.channelId === currentChannel,
-  );
+  const currentChannelMessages = useSelector(getCurrentChannelMessages(currentChannel));
 
   useEffect(() => {
     chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
@@ -57,9 +57,7 @@ const ChatBox = ({ currentChannel }) => {
           id="messages-box"
           className="chat-messages overflow-auto px-5"
         >
-          {messages
-            .filter((message) => message.channelId === currentChannel)
-            .map(renderMessage)}
+          {currentChannelMessages.map(renderMessage)}
         </div>
         <NewMessageForm />
       </div>

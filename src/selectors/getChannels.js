@@ -1,1 +1,1 @@
-export default () => (state) => state.channels.channels;
+export default (state) => state.channels.channels;

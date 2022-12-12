@@ -10,7 +10,7 @@ import { hideModal } from '../../slices/modalSlice';
 const RemoveChannel = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const id = useSelector(getModalState()).item;
+  const id = useSelector(getModalState).item;
   const api = useApi();
 
   const handleSubmit = () => {
