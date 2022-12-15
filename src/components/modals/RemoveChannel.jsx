@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useApi } from '../../hooks';
 import { getModalState } from '../../selectors';
 import { hideModal } from '../../slices/modalSlice';
+import { setCurrentChannel } from '../../slices/channelsSlice';
 
 const RemoveChannel = () => {
   const dispatch = useDispatch();
@@ -15,6 +16,7 @@ const RemoveChannel = () => {
 
   const handleSubmit = () => {
     api.removeChannel({ id });
+    dispatch(setCurrentChannel());
     dispatch(hideModal());
     toast.success(t('alertMessage.channelRemoved'));
   };

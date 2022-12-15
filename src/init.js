@@ -7,7 +7,9 @@ import { Provider as RollbarProvider, ErrorBoundary } from '@rollbar/react';
 import App from './components/App';
 import store from './slices';
 import { addMessage } from './slices/messagesSlice';
-import { addChannel, removeChannel, renameChannel } from './slices/channelsSlice';
+import {
+  addChannel, removeChannel, renameChannel,
+} from './slices/channelsSlice';
 import { ApiContext } from './context';
 import AuthProvider from './components/AuthProvider';
 import initI18Next from './i18next/i18n.js';
@@ -18,7 +20,7 @@ const init = async (socket) => {
   filter.add(filter.getDictionary('ru'));
 
   const rollbarConfig = {
-    accessToken: '5d6cc936bb624a6cbe8692f7d18f6352',
+    accessToken: process.env.REACT_APP_ROLLBAR_API_KEY,
     environment: 'production',
     captureUncaught: true,
     captureUnhandledRejections: true,

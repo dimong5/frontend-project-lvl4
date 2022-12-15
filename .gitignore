@@ -25,3 +25,4 @@ yarn-error.log*
 frontend-project-lvl4.code-workspace
 .vscode
 README.react-app.md
+.env

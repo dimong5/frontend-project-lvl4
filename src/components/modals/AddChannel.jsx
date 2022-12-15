@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 import { useApi } from '../../hooks';
 import { getChannels } from '../../selectors';
 import { hideModal } from '../../slices/modalSlice';
+import { setCurrentChannel } from '../../slices/channelsSlice';
 
 const AddChannel = () => {
   const dispatch = useDispatch();
@@ -42,7 +43,8 @@ const AddChannel = () => {
         return;
       }
 
-      api.addNewChannel({ name: values.channelName });
+      api.addNewChannel({ name: values.channelName })
+        .then(({ id }) => dispatch(setCurrentChannel(id)));
       dispatch(hideModal());
       toast.success(t('alertMessage.channelAdded'));
     },

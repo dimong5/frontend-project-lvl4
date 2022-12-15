@@ -19,11 +19,9 @@ const channelsSlice = createSlice({
     addChannel: (state, action) => {
       const channel = action.payload;
       state.channels.push(channel);
-      state.currentChannel = channel.id;
     },
     removeChannel: (state, action) => {
       state.channels = remove(state.channels, (el) => el.id !== action.payload);
-      state.currentChannel = defaultChannelId;
     },
     renameChannel: (state, action) => {
       const channel = state.channels.find(
@@ -32,7 +30,7 @@ const channelsSlice = createSlice({
       channel.name = action.payload.name;
     },
     setCurrentChannel: (state, action) => {
-      state.currentChannel = action.payload;
+      state.currentChannel = action.payload || defaultChannelId;
     },
   },
 });
