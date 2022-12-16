@@ -14,8 +14,6 @@ on:
       - '**'
     tags:
       - '**'
-env:
-  REACT_APP_ROLLBAR_API_KEY: 5d6cc936bb624a6cbe8692f7d18f6352
 
 jobs:
   build:

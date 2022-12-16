@@ -1,7 +1,9 @@
 const routes = {
   chatPagePath: () => '/',
+  loginPath: () => '/api/v1/login',
   loginPagePath: () => '/login',
-  registrationPagePath: () => 'signup',
+  registrationPath: () => '/api/v1/signup',
+  registrationPagePath: () => '/signup',
   dataPath: () => '/api/v1/data',
 };
 

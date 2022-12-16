@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import axios from 'axios';
 import { AuthContext } from '../context';
+import routes from '../routes/routes';
 
 const AuthProvider = ({ children }) => {
   const currentUser = JSON.parse(localStorage.getItem('user'));
@@ -26,7 +27,7 @@ const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
-  const signUp = async (userObj) => axios.post('/api/v1/signup', userObj);
+  const signUp = async (userObj) => axios.post(routes.registrationPath(), userObj);
 
   const authContextValues = useMemo(
     () => ({

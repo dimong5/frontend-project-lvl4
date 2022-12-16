@@ -35,7 +35,7 @@ const LoginPage = () => {
     validateOnBlur: false,
     onSubmit: async (values) => {
       try {
-        const response = await axios.post(routes.loginPagePath(), values);
+        const response = await axios.post(routes.loginPath(), values);
         const { token } = response.data;
         auth.logIn({ username: values.username, token });
         navigate(routes.chatPagePath(), { replace: true });
