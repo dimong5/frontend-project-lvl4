@@ -24,7 +24,7 @@ const LoginPage = () => {
 
   useEffect(() => {
     input.current.focus();
-  }, []);
+  }, [input]);
 
   const navigate = useNavigate();
 
@@ -35,7 +35,7 @@ const LoginPage = () => {
     validateOnBlur: false,
     onSubmit: async (values) => {
       try {
-        const response = await axios.post('/api/v1/login', values);
+        const response = await axios.post(routes.loginPagePath(), values);
         const { token } = response.data;
         auth.logIn({ username: values.username, token });
         navigate(routes.chatPagePath(), { replace: true });
@@ -44,6 +44,7 @@ const LoginPage = () => {
       }
     },
   });
+
   return (
     <div className="h-100">
       <div className="h-100" id="chat">
@@ -106,6 +107,7 @@ const LoginPage = () => {
                       <button
                         type="submit"
                         className="w-100 mb-3 btn btn-outline-primary"
+                        disabled={formik.isSubmiting}
                       >
                         {t('loginPage.submitButton')}
                       </button>

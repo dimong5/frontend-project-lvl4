@@ -16,7 +16,6 @@ import initI18Next from './i18next/i18n.js';
 
 const init = async (socket) => {
   filter.add(filter.getDictionary('en'));
-  filter.add(filter.getDictionary('fr'));
   filter.add(filter.getDictionary('ru'));
 
   const rollbarConfig = {

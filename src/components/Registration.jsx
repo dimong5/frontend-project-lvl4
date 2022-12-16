@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import {
@@ -11,6 +11,7 @@ import logo from '../images/registration_logo.jpg';
 import { useAuth } from '../hooks';
 import NavBar from './Navbar';
 import 'react-toastify/dist/ReactToastify.css';
+import routes from '../routes/routes';
 
 const Schema = Yup.object().shape({
   username: Yup.string()
@@ -32,6 +33,12 @@ const Schema = Yup.object().shape({
 });
 
 const Registration = () => {
+  const inputRef = useRef();
+
+  useEffect(() => {
+    inputRef.current.focus();
+  }, [inputRef]);
+
   const { t } = useTranslation();
   const navigate = useNavigate();
   const auth = useAuth();
@@ -42,6 +49,8 @@ const Registration = () => {
       confirmPassword: '',
     },
     validationSchema: Schema,
+    validateOnBlur: false,
+    validateOnChange: false,
     onSubmit: async (values) => {
       const user = {
         username: values.username,
@@ -51,7 +60,7 @@ const Registration = () => {
         const response = await auth.signUp(user);
         auth.logOut();
         auth.logIn({ username: values.username, token: response.data.token });
-        navigate('/', { replace: true });
+        navigate(routes.chatPagePath(), { replace: true });
       } catch (e) {
         const { status } = e.response;
         if (status === 409) {
@@ -68,7 +77,7 @@ const Registration = () => {
   return (
     <div className="h-100" id="chat">
       <div className="d-flex flex-column h-100">
-        <NavBar parentComponent="Signup" />
+        <NavBar />
         <div className="container-fluid h-100">
           <div className="row justify-content-center align-content-center h-100">
             <div className="col-12 col-md-8 col-xxl-6">
@@ -88,6 +97,7 @@ const Registration = () => {
                     </h1>
                     <FormGroup className="form-floating mb-3">
                       <FormControl
+                        ref={inputRef}
                         id="username"
                         name="username"
                         className="mb-3"
@@ -148,6 +158,7 @@ const Registration = () => {
                       className="w-100"
                       variant="outline-primary"
                       type="submit"
+                      disabled={formik.isSubmiting}
                     >
                       {t('registrationPage.submitButton')}
                     </Button>

@@ -2,18 +2,17 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
-import { setCurrentChannel, setInitialState } from '../slices/channelsSlice';
+import { setInitialState } from '../slices/channelsSlice';
 import { useAuth } from '../hooks';
 import NavBar from './Navbar';
 import ChannelsBox from './ChannelsBox';
 import ChatBox from './ChatBox';
-import { getCurrentChannel, getChannels } from '../selectors';
+import { getChannels } from '../selectors';
 import routes from '../routes/routes';
 
 import 'react-toastify/dist/ReactToastify.css';
 
 const ChatPage = () => {
-  const currentChannel = useSelector(getCurrentChannel);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const auth = useAuth();
@@ -44,13 +43,10 @@ const ChatPage = () => {
           <div className="container h-100 my-4 overflow-hidden rounded shadow">
             <div className="row h-100 bg-white flex-md-row">
               {channels.length > 0 ? (
-                <ChannelsBox
-                  currentChannel={currentChannel}
-                  setCurrentChannel={setCurrentChannel}
-                />
+                <ChannelsBox />
               ) : null}
               {channels.length > 0 ? (
-                <ChatBox currentChannel={currentChannel} />
+                <ChatBox />
               ) : null}
             </div>
           </div>

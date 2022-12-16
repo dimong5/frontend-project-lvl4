@@ -23,13 +23,14 @@ const AddChannel = () => {
       .max(20, 'addChannelModal.nameLength'),
   });
   const api = useApi();
-  const input = useRef(null);
+  const inputRef = useRef(null);
   const channels = useSelector(getChannels);
   const isUniq = (name) => channels.findIndex((ch) => ch.name === name) === -1;
 
   useEffect(() => {
-    input.current.focus();
-  }, [input]);
+    inputRef.current.focus();
+  });
+
   const formik = useFormik({
     initialValues: {
       channelName: '',
@@ -72,7 +73,7 @@ const AddChannel = () => {
               onChange={formik.handleChange}
               value={formik.values.channelName}
               onBlur={formik.handleBlur}
-              ref={input}
+              ref={inputRef}
               isInvalid={
                 formik.errors.channelName && formik.touched.channelName
               }
@@ -93,7 +94,7 @@ const AddChannel = () => {
             >
               {t('addChannelModal.cancelButton')}
             </Button>
-            <Button type="submit" variant="primary">
+            <Button type="submit" variant="primary" disabled={formik.isSubmiting}>
               {t('addChannelModal.submitButton')}
             </Button>
           </div>

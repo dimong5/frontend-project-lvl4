@@ -31,7 +31,7 @@ const RenameChannel = () => {
   useEffect(() => {
     input.current.focus();
     input.current.select();
-  }, [input]);
+  });
   const formik = useFormik({
     initialValues: {
       channelName: currentName,
@@ -53,7 +53,7 @@ const RenameChannel = () => {
   return (
     <Modal
       show="true"
-      onHide={() => hideModal()}
+      onHide={() => dispatch(hideModal())}
       dialogClassName="modal-90w"
       aria-labelledby="example-custom-modal-styling-title"
     >
@@ -93,7 +93,7 @@ const RenameChannel = () => {
             >
               {t('renameChannelModal.cancelButton')}
             </Button>
-            <Button type="submit" variant="primary">
+            <Button type="submit" variant="primary" disabled={formik.isSubmiting}>
               {t('renameChannelModal.submitButton')}
             </Button>
           </div>
