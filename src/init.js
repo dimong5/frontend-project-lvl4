@@ -19,7 +19,7 @@ const init = async (socket) => {
   filter.add(filter.getDictionary('ru'));
 
   const rollbarConfig = {
-    accessToken: process.env.REACT_APP_ROLLBAR_API_KEY,
+    accessToken: '5d6cc936bb624a6cbe8692f7d18f6352',
     environment: 'production',
     captureUncaught: true,
     captureUnhandledRejections: true,
