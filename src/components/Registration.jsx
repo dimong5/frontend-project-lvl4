@@ -33,11 +33,11 @@ const Schema = Yup.object().shape({
 });
 
 const Registration = () => {
-  const inputRef = useRef();
+  const input = useRef();
 
   useEffect(() => {
-    inputRef.current.focus();
-  }, [inputRef]);
+    input.current.focus();
+  }, []);
 
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -97,7 +97,7 @@ const Registration = () => {
                     </h1>
                     <FormGroup className="form-floating mb-3">
                       <FormControl
-                        ref={inputRef}
+                        ref={input}
                         id="username"
                         name="username"
                         className="mb-3"

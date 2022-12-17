@@ -19,12 +19,11 @@ const init = async (socket) => {
   filter.add(filter.getDictionary('ru'));
 
   const rollbarConfig = {
-    accessToken: '5d6cc936bb624a6cbe8692f7d18f6352',
+    accessToken: process.env.REACT_APP_ROLLBAR_API_KEY,
     environment: 'production',
     captureUncaught: true,
     captureUnhandledRejections: true,
   };
-  const rollbar = new Rollbar(rollbarConfig);
 
   socket.on('newMessage', (msg) => {
     store.dispatch(addMessage(msg));
@@ -77,21 +76,30 @@ const init = async (socket) => {
     );
   };
 
-  return (
-    <RollbarProvider instance={rollbar}>
-      <Provider store={store}>
-        <AuthProvider>
-          <ApiProvider>
-            <I18nextProvider i18n={await initI18Next()}>
-              <ErrorBoundary>
-                <App />
-              </ErrorBoundary>
-            </I18nextProvider>
-          </ApiProvider>
-        </AuthProvider>
-      </Provider>
-    </RollbarProvider>
+  const app = (
+    <Provider store={store}>
+      <AuthProvider>
+        <ApiProvider>
+          <I18nextProvider i18n={await initI18Next()}>
+            <ErrorBoundary>
+              <App />
+            </ErrorBoundary>
+          </I18nextProvider>
+        </ApiProvider>
+      </AuthProvider>
+    </Provider>
   );
+
+  if (process.env.REACT_APP_ROLLBAR_API_KEY) {
+    const rollbar = new Rollbar(rollbarConfig);
+    return (
+      <RollbarProvider instance={rollbar}>
+        {app}
+      </RollbarProvider>
+    );
+  }
+
+  return app;
 };
 
 export default init;

@@ -23,8 +23,10 @@ const LoginPage = () => {
   const auth = useAuth();
 
   useEffect(() => {
-    input.current.focus();
-  }, [input]);
+    setTimeout(() => {
+      input.current.focus();
+    }, 1);
+  }, []);
 
   const navigate = useNavigate();
 
@@ -38,7 +40,7 @@ const LoginPage = () => {
         const response = await axios.post(routes.loginPath(), values);
         const { token } = response.data;
         auth.logIn({ username: values.username, token });
-        navigate(routes.chatPagePath(), { replace: true });
+        navigate(routes.chatPagePath(), { replace: false });
       } catch (err) {
         formik.setErrors({ username: 'loginPage.loginOrPasswordError' });
       }

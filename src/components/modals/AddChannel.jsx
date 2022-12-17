@@ -23,13 +23,15 @@ const AddChannel = () => {
       .max(20, 'addChannelModal.nameLength'),
   });
   const api = useApi();
-  const inputRef = useRef(null);
+  const input = useRef(null);
   const channels = useSelector(getChannels);
   const isUniq = (name) => channels.findIndex((ch) => ch.name === name) === -1;
 
   useEffect(() => {
-    inputRef.current.focus();
-  });
+    setTimeout(() => {
+      input.current.focus();
+    }, 1);
+  }, []);
 
   const formik = useFormik({
     initialValues: {
@@ -38,14 +40,13 @@ const AddChannel = () => {
     validationSchema: channelNameSchema,
     validateOnBlur: false,
     validateOnChange: false,
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       if (!isUniq(values.channelName)) {
         formik.setErrors({ channelName: t('addChannelModal.mustBeUniq') });
         return;
       }
-
-      api.addNewChannel({ name: values.channelName })
-        .then(({ id }) => dispatch(setCurrentChannel(id)));
+      const channel = await api.addNewChannel({ name: values.channelName });
+      dispatch(setCurrentChannel(channel.id));
       dispatch(hideModal());
       toast.success(t('alertMessage.channelAdded'));
     },
@@ -73,7 +74,7 @@ const AddChannel = () => {
               onChange={formik.handleChange}
               value={formik.values.channelName}
               onBlur={formik.handleBlur}
-              ref={inputRef}
+              ref={input}
               isInvalid={
                 formik.errors.channelName && formik.touched.channelName
               }

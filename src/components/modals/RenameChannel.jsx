@@ -29,9 +29,12 @@ const RenameChannel = () => {
   const isUniq = (name) => channels.findIndex((ch) => ch.name === name) === -1;
 
   useEffect(() => {
-    input.current.focus();
-    input.current.select();
-  });
+    setTimeout(() => {
+      input.current.select();
+      input.current.focus();
+    }, 1);
+  }, []);
+
   const formik = useFormik({
     initialValues: {
       channelName: currentName,
@@ -39,6 +42,7 @@ const RenameChannel = () => {
     validationSchema: channelNameSchema,
     validateOnBlur: false,
     validateOnChange: false,
+    validateOnMount: false,
     onSubmit: async (values) => {
       if (!isUniq(values.channelName)) {
         formik.setErrors({ channelName: t('renameChannelModal.mustBeUniq') });
@@ -93,7 +97,11 @@ const RenameChannel = () => {
             >
               {t('renameChannelModal.cancelButton')}
             </Button>
-            <Button type="submit" variant="primary" disabled={formik.isSubmiting}>
+            <Button
+              type="submit"
+              variant="primary"
+              disabled={formik.isSubmitting}
+            >
               {t('renameChannelModal.submitButton')}
             </Button>
           </div>
